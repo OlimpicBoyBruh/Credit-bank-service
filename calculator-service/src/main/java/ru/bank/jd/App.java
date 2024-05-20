@@ -1,4 +1,6 @@
-package bank.jd.ru;
+package ru.bank.jd;
+
+import ru.bank.api.statement.StatementStatus;
 
 /**
  * Hello world!
