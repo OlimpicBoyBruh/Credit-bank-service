@@ -1,0 +1,11 @@
+server:
+  port: 8190
+springdoc:
+  swagger-ui:
+    path: "/swagger"
+    disable-swagger-default-url: true
+    use-root-path: true
+initialization:
+      interest-rate: 20.0
+      insurance-rate: 4.97
+
