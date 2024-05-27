@@ -1,6 +1,10 @@
 package ru.bank.jd.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,9 +16,12 @@ import ru.bank.api.dto.ScoringDataDto;
 import ru.bank.jd.service.CalculatorService;
 import java.util.List;
 
+
 @RestController
 @RequestMapping("/calculator")
 @AllArgsConstructor
+@Validated
+@Tag(name = "Calculator service", description = "The service calculates the terms of the loans.")
 public class CalculatorController {
 
     CalculatorService calculatorService;
@@ -25,9 +32,12 @@ public class CalculatorController {
      * @param loanStatementRequestDto запрос кредитной выписки.
      * @return - List<LoanOfferDto> список предложений.
      */
+    @Operation(summary = "Creating offers",
+            description = "Makes 4 offers, with different loan terms."
+    )
     @PostMapping("/offers")
-    public List<LoanOfferDto> searchOffers(@RequestBody LoanStatementRequestDto loanStatementRequestDto) {
-        return calculatorService.prepOffers(loanStatementRequestDto);
+    public List<LoanOfferDto> searchOffers(@Valid @RequestBody LoanStatementRequestDto loanStatementRequestDto) {
+        return calculatorService.generateLoanOffers(loanStatementRequestDto);
     }
 
     /**
@@ -36,10 +46,12 @@ public class CalculatorController {
      * @param scoringDataDto оценочные данные.
      * @return - CreditDto кредитная заявка.
      */
+    @Operation(summary = "Calculation of the final conditions",
+            description = "Data is being scoring to calculate credit conditions."
+    )
     @PostMapping("/calc")
-    public CreditDto validationData(@RequestBody ScoringDataDto scoringDataDto) {
-        //TODO realize
-        return null;
+    public CreditDto validationData(@Valid @RequestBody ScoringDataDto scoringDataDto) {
+        return calculatorService.prepareCredit(scoringDataDto);
     }
 
 }

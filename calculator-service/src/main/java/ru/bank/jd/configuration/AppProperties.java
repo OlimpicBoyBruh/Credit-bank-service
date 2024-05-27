@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class AppProperties {
     @Value("${initialization.interest-rate}")
-    private double interestRate;
+    private Double interestRate;
     @Value("${initialization.insurance-rate}")
-    private double insuranceRate;
+    private Double insuranceRate;
 }
