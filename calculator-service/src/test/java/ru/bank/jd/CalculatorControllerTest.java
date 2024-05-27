@@ -8,12 +8,12 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import ru.bank.api.dto.EmploymentDto;
-import ru.bank.api.dto.LoanStatementRequestDto;
-import ru.bank.api.dto.ScoringDataDto;
-import ru.bank.api.statement.Gender;
-import ru.bank.api.statement.MaritalStatus;
 import ru.bank.jd.controller.CalculatorController;
+import ru.bank.jd.model.dto.EmploymentDto;
+import ru.bank.jd.model.dto.LoanStatementRequestDto;
+import ru.bank.jd.model.dto.ScoringDataDto;
+import ru.bank.jd.model.statement.Gender;
+import ru.bank.jd.model.statement.MaritalStatus;
 import ru.bank.jd.service.CalculatorService;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -46,7 +46,7 @@ public class CalculatorControllerTest {
         loanStatementRequestDto.setPassportNumber("567890");
 
         scoringDataDto = new ScoringDataDto();
-        scoringDataDto.setAmount(new BigDecimal("1000.50"));
+        scoringDataDto.setAmount(new BigDecimal("100000.50"));
         scoringDataDto.setTerm(12);
         scoringDataDto.setFirstName("Иван");
         scoringDataDto.setLastName("Иванов");
@@ -69,7 +69,7 @@ public class CalculatorControllerTest {
     }
 
     @Test
-    public void searchOffersTest() throws Exception {
+    public void searchOffersSuccessfullyTest() throws Exception {
         String loanStatementJson = mapper.writeValueAsString(loanStatementRequestDto);
 
         mockMvc.perform(post("/calculator/offers")
@@ -78,12 +78,32 @@ public class CalculatorControllerTest {
                 .andExpect(status().isOk());
     }
     @Test
-    public void validationDataTest() throws Exception {
+    public void searchOffersUnsuccessfullyTest() throws Exception {
+        loanStatementRequestDto.setTerm(3);
+        String loanStatementJson = mapper.writeValueAsString(loanStatementRequestDto);
+
+        mockMvc.perform(post("/calculator/offers")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(loanStatementJson))
+                .andExpect(status().isBadRequest());
+    }
+    @Test
+    public void validationDataSuccessfullyTest() throws Exception {
         String scoringDataJson = mapper.writeValueAsString(scoringDataDto);
 
         mockMvc.perform(post("/calculator/calc")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(scoringDataJson))
                 .andExpect(status().isOk());
+    }
+    @Test
+    public void validationDataUnsuccessfullyTest() throws Exception {
+        scoringDataDto.setAmount(BigDecimal.valueOf(1000));
+        String scoringDataJson = mapper.writeValueAsString(scoringDataDto);
+
+        mockMvc.perform(post("/calculator/calc")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(scoringDataJson))
+                .andExpect(status().isBadRequest());
     }
 }

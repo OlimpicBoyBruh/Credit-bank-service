@@ -9,10 +9,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ru.bank.api.dto.CreditDto;
-import ru.bank.api.dto.LoanOfferDto;
-import ru.bank.api.dto.LoanStatementRequestDto;
-import ru.bank.api.dto.ScoringDataDto;
+import ru.bank.jd.model.dto.CreditDto;
+import ru.bank.jd.model.dto.LoanOfferDto;
+import ru.bank.jd.model.dto.LoanStatementRequestDto;
+import ru.bank.jd.model.dto.ScoringDataDto;
 import ru.bank.jd.service.CalculatorService;
 import java.util.List;
 

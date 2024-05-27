@@ -1,14 +1,15 @@
 package ru.bank.jd.model;
 
 import lombok.extern.slf4j.Slf4j;
-import ru.bank.api.dto.ScoringDataDto;
-import ru.bank.api.statement.EmploymentStatus;
-import ru.bank.api.statement.Gender;
-import ru.bank.api.statement.MaritalStatus;
 import ru.bank.jd.exception.CreditDeniedException;
+import ru.bank.jd.model.dto.ScoringDataDto;
+import ru.bank.jd.model.statement.EmploymentStatus;
+import ru.bank.jd.model.statement.Gender;
+import ru.bank.jd.model.statement.MaritalStatus;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
+
 @Slf4j
 public class ScoringDataProcess {
 

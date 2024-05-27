@@ -3,8 +3,9 @@ package ru.bank.jd.model;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
-import ru.bank.api.dto.LoanOfferDto;
+import ru.bank.jd.model.dto.LoanOfferDto;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.UUID;
 
 
@@ -33,7 +34,7 @@ public class PreScoringDataProcess {
                 isInsuranceEnabled, isSalaryClient);
     }
 
-    private BigDecimal calculateFinalInterestRate() {
+    public BigDecimal calculateFinalInterestRate() {
         double preInterestRate = basicInterestRate;
         if (isSalaryClient) {
             preInterestRate -= 1.2;
@@ -41,6 +42,6 @@ public class PreScoringDataProcess {
         if (isInsuranceEnabled) {
             preInterestRate -= 1.45;
         }
-        return BigDecimal.valueOf(preInterestRate);
+        return BigDecimal.valueOf(preInterestRate).setScale(2, RoundingMode.DOWN);
     }
 }
