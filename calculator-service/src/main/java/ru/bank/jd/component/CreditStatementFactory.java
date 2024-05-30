@@ -17,7 +17,7 @@ import java.math.RoundingMode;
 public class CreditStatementFactory {
     private final AppProperties appProperties;
     private final PaymentScheduleGenerator paymentScheduleGenerator;
-    private static final BigDecimal hundred = new BigDecimal(100);
+    private static final BigDecimal RATE_MULTIPLICATION = new BigDecimal(100);
 
     /**
      * Create credit offer.
@@ -37,7 +37,7 @@ public class CreditStatementFactory {
                 scoringDataDto.getTerm(), totalAmount);
         return CreditDto.builder()
                 .amount(scoringDataDto.getAmount())
-                .rate(interestRate.multiply(hundred).setScale(2, RoundingMode.DOWN))
+                .rate(interestRate.multiply(RATE_MULTIPLICATION).setScale(2, RoundingMode.DOWN))
                 .term(scoringDataDto.getTerm())
                 .monthlyPayment(monthlyPayment)
                 .paymentSchedule(paymentScheduleGenerator.generatePaymentSchedule(totalAmount,

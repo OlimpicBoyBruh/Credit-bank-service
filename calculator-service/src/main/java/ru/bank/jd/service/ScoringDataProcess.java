@@ -16,8 +16,8 @@ import java.time.LocalDate;
 @SuppressWarnings("java:S5411")
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ScoringDataProcess {
-    private static final BigDecimal twentyFive = new BigDecimal("25");
-    private static final BigDecimal hundred = new BigDecimal("100");
+    private static final BigDecimal NUMBER_SALARIES = new BigDecimal("25");
+    private static final BigDecimal RATE_MULTIPLICATION = new BigDecimal("100");
 
     public static BigDecimal getInterestRate(ScoringDataDto scoringDataDto, Double interestRate) {
         log.info("Calculation of the interest rate.");
@@ -46,7 +46,7 @@ public class ScoringDataProcess {
         }
 
         BigDecimal requestedAmount = scoringDataDto.getAmount();
-        BigDecimal maxAmount = scoringDataDto.getEmployment().getSalary().multiply(twentyFive);
+        BigDecimal maxAmount = scoringDataDto.getEmployment().getSalary().multiply(NUMBER_SALARIES);
         if (requestedAmount.compareTo(maxAmount) > 0) {
             creditDeny("Запрошена слишком большая сумма");
         }
@@ -68,7 +68,7 @@ public class ScoringDataProcess {
             finalInterestRate -= 0.65;
         }
         log.info("The calculation is completed. The interest rate is " + finalInterestRate);
-        return BigDecimal.valueOf(finalInterestRate).setScale(2, RoundingMode.DOWN).divide(hundred);
+        return BigDecimal.valueOf(finalInterestRate).setScale(2, RoundingMode.DOWN).divide(RATE_MULTIPLICATION);
     }
 
     private static void creditDeny(String message) {

@@ -12,7 +12,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class PreScoringDataProcess {
     private final PaymentScheduleGenerator paymentScheduleGenerator;
-    private static final BigDecimal hundred = new BigDecimal("100");
+    private static final BigDecimal RATE_MULTIPLICATION = new BigDecimal("100");
 
     public LoanOfferDto createOffer(boolean isSalaryClient, boolean isInsuranceEnabled,
                                     double interestRate, double insuranceRate,
@@ -21,7 +21,7 @@ public class PreScoringDataProcess {
                 .multiply(BigDecimal.valueOf(1 + insuranceRate / 100)).setScale(2, RoundingMode.DOWN) : amount;
 
         BigDecimal finalInterestRate =
-                calculateFinalInterestRate(interestRate, isSalaryClient, isInsuranceEnabled).divide(hundred);
+                calculateFinalInterestRate(interestRate, isSalaryClient, isInsuranceEnabled).divide(RATE_MULTIPLICATION);
         BigDecimal monthlyPayment = paymentScheduleGenerator
                 .calculateMonthlyPayment(finalInterestRate, term, totalAmount);
         return new LoanOfferDto(UUID.randomUUID().toString(), amount,
