@@ -1,16 +1,19 @@
 package ru.bank.jd.configuration;
 
-import lombok.Getter;
-import lombok.Setter;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 
-@Getter
-@Setter
+import jakarta.validation.constraints.NotNull;
+import lombok.Data;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.stereotype.Component;
+import org.springframework.validation.annotation.Validated;
+
+@Data
 @Component
+@Validated
+@ConfigurationProperties(prefix = "initialization")
 public class AppProperties {
-    @Value("${initialization.interest-rate}")
+    @NotNull
     private Double interestRate;
-    @Value("${initialization.insurance-rate}")
+    @NotNull
     private Double insuranceRate;
 }

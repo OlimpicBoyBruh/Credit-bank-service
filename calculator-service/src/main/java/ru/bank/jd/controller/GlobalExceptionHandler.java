@@ -14,7 +14,7 @@ import java.util.List;
 @ControllerAdvice
 public class GlobalExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ErrorMessage> handleValidationExceptions(MethodArgumentNotValidException exception) {
+    public ResponseEntity<ErrorMessage> handleValidationHandler(MethodArgumentNotValidException exception) {
         BindingResult result = exception.getBindingResult();
         List<FieldError> fieldErrors = result.getFieldErrors();
         StringBuilder errorMessage = new StringBuilder();
@@ -27,7 +27,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<ErrorMessage> birthDateValidate(IllegalArgumentException exception) {
+    public ResponseEntity<ErrorMessage> argumentConstructHandler(IllegalArgumentException exception) {
 
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
@@ -35,7 +35,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(CreditDeniedException.class)
-    public ResponseEntity<ErrorMessage> CreditDenyException(CreditDeniedException exception) {
+    public ResponseEntity<ErrorMessage> creditDenyHandler(CreditDeniedException exception) {
         return ResponseEntity
                 .status(HttpStatus.FORBIDDEN)
                 .body(new ErrorMessage(exception.getMessage()));
