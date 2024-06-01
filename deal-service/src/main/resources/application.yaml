@@ -1,0 +1,33 @@
+server:
+  port: 8085
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/credit-db
+    username: fakeuser
+    password: fakepassword
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: true
+    hibernate:
+      default_schema: "${app.schema}"
+      ddl-auto: create-drop
+      properties:
+        hibernate:
+          default_schema: "${app.schema}"
+          dialect: org.hibernate.dialect.PostgreSQLDialect
+          jdbc.time_zone: UTC
+  liquibase:
+    defaultSchema: "${app.schema}"
+
+springdoc:
+  swagger-ui:
+    path: "/swagger"
+    disable-swagger-default-url: true
+    use-root-path: true
+calculator:
+  url-offer: http://localhost:8190/calculator/offers
+  url-calc: http://localhost:8190/calculator/calc
+app:
+  schema: "credit_bank"
