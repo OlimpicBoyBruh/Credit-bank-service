@@ -14,7 +14,6 @@ import ru.bank.jd.entity.Credit;
 import ru.bank.jd.entity.Statement;
 import ru.bank.jd.mapping.ClientMapper;
 import ru.bank.jd.mapping.CreditMapper;
-import ru.bank.jd.mapping.PassportDtoMapper;
 import ru.bank.jd.mapping.ScoringDataMapper;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -68,7 +67,6 @@ public class ManagerService {
         statement.setStatus(ApplicationStatus.APPROVED.toString());
 
         ClientMapper.INSTANCE.finishRegistrationRequestDtoToClient(requestDto, client);
-        PassportDtoMapper.INSTANCE.updatePassportFromRequestDto(requestDto, client.getPassport());
         clientService.save(client);
 
         CreditDto creditDto = calculationRest.callCalc(ScoringDataMapper.INSTANCE

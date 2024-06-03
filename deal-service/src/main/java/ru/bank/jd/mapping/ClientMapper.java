@@ -20,5 +20,7 @@ public interface ClientMapper {
     @Mapping(source = "finishRegistrationRequestDto.maritalStatus", target = "maritalStatus")
     @Mapping(source = "finishRegistrationRequestDto.dependentAmount", target = "dependentAmount")
     @Mapping(source = "finishRegistrationRequestDto.accountNumber", target = "accountNumber")
+    @Mapping(source = "finishRegistrationRequestDto.passportIssueBranch", target = "passport.issueBranch")
+    @Mapping(source = "finishRegistrationRequestDto.passportIssueDate", target = "passport.issueDate")
     void finishRegistrationRequestDtoToClient(FinishRegistrationRequestDto finishRegistrationRequestDto, @MappingTarget Client client);
 }
