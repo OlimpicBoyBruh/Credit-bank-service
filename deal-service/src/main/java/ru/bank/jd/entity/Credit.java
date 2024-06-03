@@ -2,7 +2,10 @@ package ru.bank.jd.entity;
 
 import io.hypersistence.utils.hibernate.type.json.JsonType;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Type;
 import ru.bank.jd.dto.PaymentScheduleElementDto;
 import ru.bank.jd.dto.enumerated.CreditStatus;
@@ -11,6 +14,9 @@ import java.util.List;
 import java.util.UUID;
 
 @Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 public class Credit {
     @Id

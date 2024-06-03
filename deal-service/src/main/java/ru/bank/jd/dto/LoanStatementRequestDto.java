@@ -61,14 +61,14 @@ public class LoanStatementRequestDto {
     /**
      * Серия паспорта заявителя.
      */
-    @Schema(description = "Passport series of the applicant.", defaultValue = "1234")
+    @Schema(description = "PassportDto series of the applicant.", defaultValue = "1234")
     @NotBlank(message = "Серия паспорта не должна быть пустой или null")
     @Pattern(regexp = "\\d{4}+", message = "Серия паспорта должна состоять из 4 цифр")
     private String passportSeries;
     /**
      * Номер паспорта заявителя.
      */
-    @Schema(description = "Passport number of the applicant.", defaultValue = "567890")
+    @Schema(description = "PassportDto number of the applicant.", defaultValue = "567890")
     @NotBlank(message = "Номер паспорта не должно быть пустым или null")
     @Pattern(regexp = "\\d{6}+", message = "Номер паспорта должен состоять из 6 цифр")
     private String passportNumber;

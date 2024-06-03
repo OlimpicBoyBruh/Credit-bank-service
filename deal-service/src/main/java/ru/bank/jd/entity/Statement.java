@@ -10,13 +10,14 @@ import org.hibernate.annotations.Type;
 import ru.bank.jd.dto.LoanOfferDto;
 import ru.bank.jd.dto.StatementStatusHistoryDto;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Data
 @Builder
 @Entity
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 public class Statement {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -36,5 +37,5 @@ public class Statement {
     private LoanOfferDto appliedOffer;
     @Type(JsonType.class)
     @Column(columnDefinition = "jsonb")
-    private StatementStatusHistoryDto statusHistory;
+    private List<StatementStatusHistoryDto> statusHistory;
 }

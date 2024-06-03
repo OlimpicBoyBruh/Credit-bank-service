@@ -9,6 +9,5 @@ import ru.bank.jd.entity.Credit;
 public interface CreditMapper {
     CreditMapper INSTANCE = Mappers.getMapper(CreditMapper.class);
 
-
     Credit creditDtoToCredit(CreditDto creditDto);
 }

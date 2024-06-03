@@ -2,16 +2,22 @@ package ru.bank.jd.entity;
 
 import io.hypersistence.utils.hibernate.type.json.JsonType;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Type;
-import ru.bank.jd.converter.Passport;
+import ru.bank.jd.dto.PassportDto;
 import ru.bank.jd.dto.enumerated.Gender;
 import ru.bank.jd.dto.enumerated.MaritalStatus;
 import java.time.LocalDate;
 import java.util.UUID;
 
 @Data
+@Builder
 @Entity
+@AllArgsConstructor
+@NoArgsConstructor
 public class Client {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -30,5 +36,5 @@ public class Client {
     @JoinColumn(name = "passportId")
     @Type(JsonType.class)
     @Column(columnDefinition = "jsonb")
-    private Passport passport;
+    private PassportDto passport;
 }

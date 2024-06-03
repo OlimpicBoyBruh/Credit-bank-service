@@ -65,27 +65,27 @@ public class ScoringDataDto {
     /**
      * Серия паспорта.
      */
-    @Schema(description = "Passport series.", defaultValue = "1234")
+    @Schema(description = "PassportDto series.", defaultValue = "1234")
     @NotBlank(message = "Серия паспорта не должна быть пустой или null")
     @Pattern(regexp = "\\d{4}+", message = "Серия паспорта должна состоять из 4 цифр")
     private String passportSeries;
     /**
      * Номер паспорта.
      */
-    @Schema(description = "Passport number.", defaultValue = "567890")
+    @Schema(description = "PassportDto number.", defaultValue = "567890")
     @NotBlank(message = "Номер паспорта не должно быть пустым или null")
     @Pattern(regexp = "\\d{6}+", message = "Номер паспорта должен состоять из 6 цифр")
     private String passportNumber;
     /**
      * Дата получения паспорта.
      */
-    @Schema(description = "Passport issue date.", example = "2010-05-20")
+    @Schema(description = "PassportDto issue date.", example = "2010-05-20")
     @NotNull
     private LocalDate passportIssueDate;
     /**
      * Отделение по выдаче паспорта.
      */
-    @Schema(description = "Passport issue branch.", defaultValue = "Отделение №5")
+    @Schema(description = "PassportDto issue branch.", defaultValue = "Отделение №5")
     @NotNull
     private String passportIssueBranch;
     /**
