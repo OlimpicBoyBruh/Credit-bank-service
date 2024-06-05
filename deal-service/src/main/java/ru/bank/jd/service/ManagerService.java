@@ -5,7 +5,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.bank.jd.component.RequestTemplateCalculationRest;
-import ru.bank.jd.dto.*;
+import ru.bank.jd.dto.CreditDto;
+import ru.bank.jd.dto.StatementStatusHistoryDto;
+import ru.bank.jd.dto.api.FinishRegistrationRequestDto;
+import ru.bank.jd.dto.api.LoanOfferDto;
+import ru.bank.jd.dto.api.LoanStatementRequestDto;
 import ru.bank.jd.dto.enumerated.ApplicationStatus;
 import ru.bank.jd.dto.enumerated.ChangeType;
 import ru.bank.jd.dto.enumerated.CreditStatus;
@@ -24,19 +28,23 @@ import java.util.UUID;
 @Transactional
 @RequiredArgsConstructor
 public class ManagerService {
-    private final ClientService clientService;
-    private final CreditService creditService;
-    private final StatementService statementService;
+    private final ClientRepositoryService clientRepositoryService;
+    private final CreditRepositoryService creditRepositoryService;
+    private final StatementRepositoryService statementRepositoryService;
     private final RequestTemplateCalculationRest calculationRest;
+    private final ClientMapper clientMapper;
+    private final ScoringDataMapper scoringDataMapper;
+    private final CreditMapper creditMapper;
+
 
     public List<LoanOfferDto> getLoanOffer(LoanStatementRequestDto loanStatementRequestDto, String sesCode) {
         log.info("invoke getLoanOffer.");
         Statement statement = Statement.builder()
-                .client(clientService.saveFromLoanDto(loanStatementRequestDto))
+                .client(clientRepositoryService.saveFromLoanDto(loanStatementRequestDto))
                 .creationDate(LocalDateTime.now())
                 .sesCode(sesCode)
                 .build();
-        statementService.save(statement);
+        statementRepositoryService.save(statement);
         return calculationRest.callOffers(loanStatementRequestDto).stream()
                 .map(offer -> {
                     offer.setStatementId(statement.getStatementId().toString());
@@ -47,7 +55,7 @@ public class ManagerService {
 
     public void selectLoanOffer(LoanOfferDto loanOfferDto) {
         log.info("invoke selectLoanOffer -  LoanOfferDto: {}", loanOfferDto);
-        Statement statement = statementService.getReferenceById(UUID.fromString(loanOfferDto.getStatementId()));
+        Statement statement = statementRepositoryService.getReferenceById(UUID.fromString(loanOfferDto.getStatementId()));
         statement.setAppliedOffer(loanOfferDto);
         StatementStatusHistoryDto historyDto =
                 new StatementStatusHistoryDto(ApplicationStatus.PREAPPROVAL, LocalDateTime.now(), ChangeType.AUTOMATIC);
@@ -55,27 +63,27 @@ public class ManagerService {
         statement.setStatus(historyDto.getStatus().toString());
         statement.setStatusHistory(List.of(historyDto));
 
-        statementService.save(statement);
+        statementRepositoryService.save(statement);
     }
 
     public void calculateCredit(FinishRegistrationRequestDto requestDto, String statementId) {
         log.info("Invoke calculateCredit.");
-        Statement statement = statementService.getReferenceById(UUID.fromString(statementId));
-        Client client = clientService.getById(statement.getClient().getClientId());
+        Statement statement = statementRepositoryService.getReferenceById(UUID.fromString(statementId));
+        Client client = clientRepositoryService.getById(statement.getClient().getClientId());
         statement.getStatusHistory()
                 .add(new StatementStatusHistoryDto(ApplicationStatus.APPROVED, LocalDateTime.now(), ChangeType.AUTOMATIC));
         statement.setStatus(ApplicationStatus.APPROVED.toString());
 
-        ClientMapper.INSTANCE.finishRegistrationRequestDtoToClient(requestDto, client);
-        clientService.save(client);
+        clientMapper.finishRegistrationRequestDtoToClient(requestDto, client);
+        clientRepositoryService.save(client);
 
-        CreditDto creditDto = calculationRest.callCalc(ScoringDataMapper.INSTANCE
+        CreditDto creditDto = calculationRest.callCalc(scoringDataMapper
                 .clientAndFinishRequestAndLoanOfferToScoringDto(client,
                         requestDto, statement.getAppliedOffer()));
         log.debug("Received creditDto: {}", creditDto);
-        Credit credit = CreditMapper.INSTANCE.creditDtoToCredit(creditDto);
+        Credit credit = creditMapper.creditDtoToCredit(creditDto);
         credit.setCreditStatus(CreditStatus.CALCULATED);
         statement.setCreditId(credit);
-        creditService.save(credit);
+        creditRepositoryService.save(credit);
     }
 }

@@ -8,11 +8,10 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
-import ru.bank.jd.dto.FinishRegistrationRequestDto;
-import ru.bank.jd.dto.LoanOfferDto;
-import ru.bank.jd.dto.LoanStatementRequestDto;
+import ru.bank.jd.dto.api.FinishRegistrationRequestDto;
+import ru.bank.jd.dto.api.LoanOfferDto;
+import ru.bank.jd.dto.api.LoanStatementRequestDto;
 import ru.bank.jd.service.ManagerService;
-import ru.bank.jd.service.StatementService;
 import java.util.List;
 
 @Slf4j

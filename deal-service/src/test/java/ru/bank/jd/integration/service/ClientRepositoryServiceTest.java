@@ -1,6 +1,5 @@
-package ru.bank.jd.service;
+package ru.bank.jd.integration.service;
 
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,21 +11,22 @@ import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.utility.DockerImageName;
-import ru.bank.jd.dto.LoanStatementRequestDto;
+import ru.bank.jd.dto.api.LoanStatementRequestDto;
 import ru.bank.jd.dto.enumerated.Gender;
 import ru.bank.jd.dto.enumerated.MaritalStatus;
 import ru.bank.jd.entity.Client;
+import ru.bank.jd.service.ClientRepositoryService;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.*;
 
-@Testcontainers
 @SpringBootTest
+@Testcontainers
 @Transactional
-class ClientServiceTest {
+class ClientRepositoryServiceTest {
     @Autowired
-    private ClientService clientService;
+    private ClientRepositoryService clientRepositoryService;
     @Container
     private static final PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>(DockerImageName.parse("postgres:13.8-alpine"));
 
@@ -41,8 +41,8 @@ class ClientServiceTest {
     @Test
     void saveFromLoanDto() {
         LoanStatementRequestDto loanStatementRequestDto = getLoanStatementRequestDto();
-        clientService.saveFromLoanDto(loanStatementRequestDto);
-        Client client = clientService.getAll().get(0);
+        clientRepositoryService.saveFromLoanDto(loanStatementRequestDto);
+        Client client = clientRepositoryService.getAll().get(0);
         assertAll(
                 () -> assertEquals("Иван", client.getFirstName()),
                 () -> assertEquals("Иванов", client.getLastName()),
@@ -50,19 +50,21 @@ class ClientServiceTest {
                 () -> assertEquals("1234", client.getPassport().getSeries()),
                 () -> assertEquals("567890", client.getPassport().getNumber()));
     }
+
     @Test
     void save() {
         Client client = getClient();
-         assertDoesNotThrow(() -> clientService.save(client));
+        assertDoesNotThrow(() -> clientRepositoryService.save(client));
 
     }
+
     @Test
     void getByIdEntity() {
         Client client = getClient();
-         Client client1 = clientService.save(client);
+        Client client1 = clientRepositoryService.save(client);
 
-        Client clientTest  = clientService.getById(client1.getClientId());
-                assertAll(
+        Client clientTest = clientRepositoryService.getById(client1.getClientId());
+        assertAll(
                 () -> assertEquals("John", clientTest.getFirstName()),
                 () -> assertEquals("Doe", clientTest.getLastName()),
                 () -> assertEquals("john.doe@example.com", clientTest.getEmail()),
@@ -72,7 +74,7 @@ class ClientServiceTest {
 
     @Test
     void saveEntityClientNull() {
-        assertThrows(InvalidDataAccessApiUsageException.class, () -> clientService.save(null));
+        assertThrows(InvalidDataAccessApiUsageException.class, () -> clientRepositoryService.save(null));
     }
 
     private Client getClient() {

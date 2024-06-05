@@ -9,8 +9,8 @@ import org.springframework.validation.annotation.Validated;
 @Data
 @Component
 @Validated
-@ConfigurationProperties(prefix = "calculator")
-public class AppProperties {
+@ConfigurationProperties(prefix = "integration.calculator")
+public class IntegrationProperties {
     @NotNull
     private String urlOffer;
     @NotNull

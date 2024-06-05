@@ -6,10 +6,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.bank.jd.entity.Credit;
 import ru.bank.jd.repository.CreditRepository;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class CreditService {
+public class CreditRepositoryService {
     private final CreditRepository creditRepository;
 
     @Transactional

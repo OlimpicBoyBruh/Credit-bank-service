@@ -1,17 +1,21 @@
-package ru.bank.jd.dto;
+package ru.bank.jd.dto.api;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import ru.bank.jd.dto.EmploymentDto;
 import ru.bank.jd.dto.enumerated.Gender;
 import ru.bank.jd.dto.enumerated.MaritalStatus;
 import java.time.LocalDate;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @Schema(description = "Запрос на завершение регистрации")
 public class FinishRegistrationRequestDto {
     /**

@@ -11,13 +11,13 @@ import java.util.UUID;
 @Slf4j
 @RequiredArgsConstructor
 @Service
-public class StatementService {
+public class StatementRepositoryService {
     private final StatementRepository statementRepository;
 
     @Transactional
     public Statement save(Statement statement) {
         log.info("invoke save statement entity.");
-       return statementRepository.save(statement);
+        return statementRepository.save(statement);
     }
 
     public Statement getReferenceById(UUID statementId) {

@@ -1,4 +1,4 @@
-package ru.bank.jd.controller;
+package ru.bank.jd.integration.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -8,13 +8,17 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import ru.bank.jd.dto.*;
+import ru.bank.jd.controller.DealController;
+import ru.bank.jd.dto.EmploymentDto;
+import ru.bank.jd.dto.ScoringDataDto;
+import ru.bank.jd.dto.api.FinishRegistrationRequestDto;
+import ru.bank.jd.dto.api.LoanOfferDto;
+import ru.bank.jd.dto.api.LoanStatementRequestDto;
 import ru.bank.jd.dto.enumerated.EmploymentStatus;
 import ru.bank.jd.dto.enumerated.Gender;
 import ru.bank.jd.dto.enumerated.MaritalStatus;
 import ru.bank.jd.dto.enumerated.Position;
 import ru.bank.jd.service.ManagerService;
-import ru.bank.jd.service.StatementService;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -140,24 +144,22 @@ class DealControllerTest {
     }
 
     public FinishRegistrationRequestDto getFinishRegistrationRequestDto() {
-        FinishRegistrationRequestDto finishRegistrationRequestDto = new FinishRegistrationRequestDto();
-        finishRegistrationRequestDto.setGender(Gender.MALE);
-        finishRegistrationRequestDto.setMaritalStatus(MaritalStatus.MARRIED);
-        finishRegistrationRequestDto.setDependentAmount(2);
-        finishRegistrationRequestDto.setPassportIssueDate(LocalDate.of(2010, 5, 20));
-        finishRegistrationRequestDto.setPassportIssueBranch("Отделение №5");
 
-        EmploymentDto employment = new EmploymentDto();
-        employment.setEmploymentStatus(EmploymentStatus.EMPLOYED);
-        employment.setEmployerINN("1234567890");
-        employment.setSalary(BigDecimal.valueOf(50000.00));
-        employment.setPosition(Position.MANAGER);
-        employment.setWorkExperienceTotal(18);
-        employment.setWorkExperienceCurrent(3);
-
-        finishRegistrationRequestDto.setEmployment(employment);
-        finishRegistrationRequestDto.setAccountNumber("1234567890123456");
-
-        return finishRegistrationRequestDto;
+        return FinishRegistrationRequestDto.builder()
+                .gender(Gender.MALE)
+                .maritalStatus(MaritalStatus.MARRIED)
+                .dependentAmount(2)
+                .passportIssueDate(LocalDate.of(2010, 5, 20))
+                .passportIssueBranch("Отделение №5")
+                .employment(EmploymentDto.builder()
+                        .employmentStatus(EmploymentStatus.EMPLOYED)
+                        .employerINN("1234567890")
+                        .salary(BigDecimal.valueOf(50000.00))
+                        .position(Position.MANAGER)
+                        .workExperienceCurrent(18)
+                        .workExperienceCurrent(3)
+                        .build())
+                .accountNumber("1234567890123456")
+                .build();
     }
 }

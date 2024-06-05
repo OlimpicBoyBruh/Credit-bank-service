@@ -1,4 +1,4 @@
-package ru.bank.jd.service;
+package ru.bank.jd.integration.service;
 
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
@@ -13,16 +13,17 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.utility.DockerImageName;
 import ru.bank.jd.dto.enumerated.CreditStatus;
 import ru.bank.jd.entity.Credit;
+import ru.bank.jd.service.CreditRepositoryService;
 import java.math.BigDecimal;
 import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.*;
 
-@Testcontainers
 @SpringBootTest
+@Testcontainers
 @Transactional
-class CreditServiceTest {
+class CreditRepositoryServiceTest {
     @Autowired
-    private CreditService creditService;
+    private CreditRepositoryService creditRepositoryService;
 
     @DynamicPropertySource
     static void configuration(DynamicPropertyRegistry registry) {
@@ -38,7 +39,7 @@ class CreditServiceTest {
 
     @Test
     void saveEntityCreditNull() {
-        assertThrows(InvalidDataAccessApiUsageException.class, () -> creditService.save(null));
+        assertThrows(InvalidDataAccessApiUsageException.class, () -> creditRepositoryService.save(null));
     }
 
     @Test
@@ -47,7 +48,7 @@ class CreditServiceTest {
         credit.setCreditId(UUID.randomUUID());
         credit.setAmount(new BigDecimal("50000"));
         credit.setCreditStatus(CreditStatus.CALCULATED);
-        Credit creditSave = creditService.save(credit);
+        Credit creditSave = creditRepositoryService.save(credit);
 
         assertAll(
                 () -> assertEquals(new BigDecimal("50000"), creditSave.getAmount()),

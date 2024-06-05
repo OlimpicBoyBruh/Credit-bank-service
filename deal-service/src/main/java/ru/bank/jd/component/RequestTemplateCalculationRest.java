@@ -6,19 +6,20 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
-import ru.bank.jd.configuration.AppProperties;
+import ru.bank.jd.configuration.IntegrationProperties;
 import ru.bank.jd.dto.CreditDto;
-import ru.bank.jd.dto.LoanOfferDto;
-import ru.bank.jd.dto.LoanStatementRequestDto;
 import ru.bank.jd.dto.ScoringDataDto;
+import ru.bank.jd.dto.api.LoanOfferDto;
+import ru.bank.jd.dto.api.LoanStatementRequestDto;
 import java.util.LinkedHashMap;
 import java.util.List;
+
 @Slf4j
 @Component
 @RequiredArgsConstructor
 public class RequestTemplateCalculationRest {
     private final RestTemplate restTemplate;
-    private final AppProperties appProperties;
+    private final IntegrationProperties integrationProperties;
     private final ObjectMapper objectMapper;
 
     /**
@@ -32,11 +33,14 @@ public class RequestTemplateCalculationRest {
         log.info("Invoke method callOffer, calculate-service");
         HttpEntity<LoanStatementRequestDto> request = new HttpEntity<>(loanStatementRequestDto);
         List<LinkedHashMap<LoanOfferDto, String>> response = restTemplate.postForObject
-                (appProperties.getUrlOffer(), request, List.class);
-        assert response != null : "Response is null";
-        return response.stream()
-                .map(offer -> objectMapper.convertValue(offer, LoanOfferDto.class))
-                .toList();
+                (integrationProperties.getUrlOffer(), request, List.class);
+        if (response != null) {
+            return response.stream()
+                    .map(offer -> objectMapper.convertValue(offer, LoanOfferDto.class))
+                    .toList();
+        } else {
+            throw new IllegalArgumentException("Response is null");
+        }
     }
 
     /**
@@ -48,7 +52,7 @@ public class RequestTemplateCalculationRest {
     public CreditDto callCalc(ScoringDataDto scoringDataDto) {
         log.info("Invoke method callCalc, calculate-service");
         HttpEntity<ScoringDataDto> request = new HttpEntity<>(scoringDataDto);
-        CreditDto response = restTemplate.postForObject(appProperties.getUrlCalc(), request, CreditDto.class);
+        CreditDto response = restTemplate.postForObject(integrationProperties.getUrlCalc(), request, CreditDto.class);
         if (response != null) {
             return response;
         } else {

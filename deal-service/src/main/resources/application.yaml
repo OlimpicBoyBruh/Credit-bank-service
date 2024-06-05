@@ -23,8 +23,9 @@ springdoc:
     path: "/swagger"
     disable-swagger-default-url: true
     use-root-path: true
-calculator:
-  url-offer: http://localhost:8190/calculator/offers
-  url-calc: http://localhost:8190/calculator/calc
+integration:
+  calculator:
+    url-offer: http://localhost:8190/calculator/offers
+    url-calc: http://localhost:8190/calculator/calc
 app:
   schema: "credit_bank"

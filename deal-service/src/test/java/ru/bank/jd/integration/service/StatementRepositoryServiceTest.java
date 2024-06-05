@@ -1,4 +1,4 @@
-package ru.bank.jd.service;
+package ru.bank.jd.integration.service;
 
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
@@ -15,6 +15,9 @@ import ru.bank.jd.dto.enumerated.ApplicationStatus;
 import ru.bank.jd.entity.Client;
 import ru.bank.jd.entity.Credit;
 import ru.bank.jd.entity.Statement;
+import ru.bank.jd.service.ClientRepositoryService;
+import ru.bank.jd.service.CreditRepositoryService;
+import ru.bank.jd.service.StatementRepositoryService;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -22,15 +25,15 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.*;
 
 @Testcontainers
-@SpringBootTest
 @Transactional
-class StatementServiceTest {
+@SpringBootTest
+class StatementRepositoryServiceTest {
     @Autowired
-    private StatementService statementService;
+    private StatementRepositoryService statementRepositoryService;
     @Autowired
-    private ClientService clientService;
+    private ClientRepositoryService clientRepositoryService;
     @Autowired
-    private CreditService creditService;
+    private CreditRepositoryService creditRepositoryService;
     @Container
     private static final PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>(DockerImageName.parse("postgres:13.8-alpine"));
 
@@ -44,21 +47,21 @@ class StatementServiceTest {
 
     @Test
     void saveEntityNull() {
-        assertThrows(InvalidDataAccessApiUsageException.class, () -> statementService.save(null));
+        assertThrows(InvalidDataAccessApiUsageException.class, () -> statementRepositoryService.save(null));
     }
 
     @Test
     void
     saveEntity() {
         Statement statement = getStatement();
-        assertDoesNotThrow(() -> statementService.save(statement));
+        assertDoesNotThrow(() -> statementRepositoryService.save(statement));
     }
 
     @Test
     void getReferenceById() {
         Statement statement = getStatement();
-        statement = statementService.save(statement);
-        Statement statementGet = statementService.getReferenceById(statement.getStatementId());
+        statement = statementRepositoryService.save(statement);
+        Statement statementGet = statementRepositoryService.getReferenceById(statement.getStatementId());
 
         assertAll(
                 () -> assertEquals("ABC123", statementGet.getSesCode()),
@@ -66,8 +69,8 @@ class StatementServiceTest {
     }
 
     private Statement getStatement() {
-        Client client = clientService.save(getClient());
-        Credit credit = creditService.save(getCredit());
+        Client client = clientRepositoryService.save(getClient());
+        Credit credit = creditRepositoryService.save(getCredit());
 
         return Statement.builder()
                 .statementId(UUID.randomUUID())

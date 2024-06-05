@@ -19,6 +19,7 @@ public class GlobalExceptionHandler {
                 .status(HttpStatus.NOT_FOUND)
                 .body(new ErrorMessage(exception.getMessage()));
     }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorMessage> handleValidationHandler(MethodArgumentNotValidException exception) {
         BindingResult result = exception.getBindingResult();
@@ -31,6 +32,7 @@ public class GlobalExceptionHandler {
                 .status(HttpStatus.BAD_REQUEST)
                 .body(new ErrorMessage(errorMessage.toString()));
     }
+
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<ErrorMessage> illegalArgumentHandler(IllegalArgumentException exception) {
         return ResponseEntity
