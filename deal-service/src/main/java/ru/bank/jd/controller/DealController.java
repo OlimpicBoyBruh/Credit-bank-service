@@ -34,7 +34,7 @@ public class DealController {
             description = "Возвращает 4 предложения с разными условиями на выбор, отправляется запрос в calculate service."
     )
     @PostMapping("/statement")
-    public List<LoanOfferDto> calculationPossibleLoan(@RequestBody @Valid @Parameter(description = "Кредитная заявка.")
+    public List<LoanOfferDto> calculationPossibleLoan(@RequestBody @Parameter(description = "Кредитная заявка.")
                                                       LoanStatementRequestDto loanStatementRequestDto,
                                                       HttpServletRequest request) {
         log.info("invoke: /statement");

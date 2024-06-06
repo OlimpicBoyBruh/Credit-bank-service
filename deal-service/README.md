@@ -9,7 +9,7 @@ Calculate для расчета условий по кредиту.
 
 - Java
 - Spring Boot
-- Flyway migration
+- Liquibase migration
 - Postgresql
 - Docker
 

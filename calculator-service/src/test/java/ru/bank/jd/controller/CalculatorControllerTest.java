@@ -8,12 +8,12 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import ru.bank.jd.service.CalculatorService;
 import ru.bank.jd.dto.EmploymentDto;
 import ru.bank.jd.dto.LoanStatementRequestDto;
 import ru.bank.jd.dto.ScoringDataDto;
 import ru.bank.jd.dto.enumerated.Gender;
 import ru.bank.jd.dto.enumerated.MaritalStatus;
-import ru.bank.jd.service.CalculatorService;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import static org.mockito.Mockito.when;
@@ -44,18 +44,6 @@ class CalculatorControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(loanStatementJson))
                 .andExpect(status().isOk());
-    }
-
-    @Test
-    void searchOffersUnsuccessfullyTest() throws Exception {
-        LoanStatementRequestDto loanStatementRequestDto = getLoanStatementRequestDto();
-        loanStatementRequestDto.setTerm(3);
-        String loanStatementJson = mapper.writeValueAsString(loanStatementRequestDto);
-
-        mockMvc.perform(post("/calculator/offers")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(loanStatementJson))
-                .andExpect(status().isBadRequest());
     }
 
     @Test

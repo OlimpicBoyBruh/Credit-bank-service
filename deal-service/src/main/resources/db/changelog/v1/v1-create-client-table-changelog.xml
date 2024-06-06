@@ -1,0 +1,37 @@
+<databaseChangeLog xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet id="v1-1" author="Artem Meshcheryakov">
+        <createTable tableName="client">
+            <column name="client_id" type="uuid">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="last_name" type="varchar(30)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="first_name" type="varchar(30)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="middle_name" type="varchar(30)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="gender" type="varchar(30)">
+                <constraints checkConstraint="gender IN ('MALE', 'FEMALE', 'NOT_BINARY')"/>
+            </column>
+            <column name="passport" type="jsonb"/>
+            <column name="birthdate" type="date"/>
+            <column name="dependent_amount" type="integer"/>
+            <column name="account_number" type="varchar(25)"/>
+            <column name="email" type="varchar(50)"/>
+            <column name="marital_status" type="varchar(25)">
+                <constraints checkConstraint="marital_status IN ('SINGLE', 'MARRIED', 'DIVORCED', 'WIDOWED')"/>
+            </column>
+        </createTable>
+        <rollback>
+            <dropTable tableName="client"/>
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>

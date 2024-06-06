@@ -1,0 +1,13 @@
+server:
+  port: 8205
+springdoc:
+  swagger-ui:
+    path: "/swagger"
+    disable-swagger-default-url: true
+    use-root-path: true
+integration:
+  deal:
+    url-default: http://localhost:8085
+    post-method:
+      url-select-offer: /deal/offer/select
+      url-statement: /deal/statement
