@@ -1,7 +1,9 @@
 package ru.bank.jd.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import ru.bank.jd.dto.enumerated.EmploymentStatus;
 import ru.bank.jd.dto.enumerated.Position;
 import java.math.BigDecimal;
@@ -33,7 +35,7 @@ public class EmploymentDto {
     /**
      * Общий стаж.
      */
-    @Schema(description = "Total work experience",  defaultValue = "18")
+    @Schema(description = "Total work experience", defaultValue = "18")
     private Integer workExperienceTotal;
     /**
      * Стаж на текущем месте.

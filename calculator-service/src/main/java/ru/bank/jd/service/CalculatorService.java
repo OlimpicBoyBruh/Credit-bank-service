@@ -9,6 +9,7 @@ import ru.bank.jd.dto.CreditDto;
 import ru.bank.jd.dto.LoanOfferDto;
 import ru.bank.jd.dto.LoanStatementRequestDto;
 import ru.bank.jd.dto.ScoringDataDto;
+import ru.bank.jd.util.AnalysisBirthdate;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Stream;
@@ -21,6 +22,7 @@ public class CalculatorService {
     private final CreditStatementFactory creditStatementFactory;
 
     public List<LoanOfferDto> generateLoanOffers(LoanStatementRequestDto loanStatementRequestDto) {
+        AnalysisBirthdate.validate(loanStatementRequestDto.getBirthdate());
         log.info("Creating credit offers.");
         return Stream.of(
                 creditOfferFactory.createLoanOffer(true, true, loanStatementRequestDto),
@@ -31,6 +33,7 @@ public class CalculatorService {
     }
 
     public CreditDto prepareCredit(ScoringDataDto scoringDataDto) {
+        AnalysisBirthdate.validate(scoringDataDto.getBirthdate());
         log.info("Starting creditDto formation.");
         return creditStatementFactory.fillCreditForm(scoringDataDto);
     }

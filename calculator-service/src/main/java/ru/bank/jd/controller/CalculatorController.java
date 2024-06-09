@@ -39,10 +39,10 @@ public class CalculatorController {
     )
     @PostMapping("/offers")
     public List<LoanOfferDto> searchOffers(
-             @RequestBody @Parameter(description = "Credit statement.") LoanStatementRequestDto loanStatementRequestDto) {
+            @RequestBody @Parameter(description = "Credit statement.") @Valid LoanStatementRequestDto loanStatementRequestDto) {
         log.info("invoke: /offers");
         log.debug("Received loanStatementRequestDto: {}", loanStatementRequestDto);
-        List<LoanOfferDto> loanOfferDtoList =  calculatorService.generateLoanOffers(loanStatementRequestDto);
+        List<LoanOfferDto> loanOfferDtoList = calculatorService.generateLoanOffers(loanStatementRequestDto);
         log.debug("Sent loanOfferDtoList: {}", loanOfferDtoList);
         return loanOfferDtoList;
     }

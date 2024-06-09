@@ -37,8 +37,9 @@ public class StatementController {
                                              LoanStatementRequestDto loanStatementRequestDto) {
         log.info("invoke: /statement");
         log.debug("Received loanStatementRequestDto: {}", loanStatementRequestDto);
-
-        return statementService.searchOffer(loanStatementRequestDto);
+        List<LoanOfferDto> offers = statementService.searchOffer(loanStatementRequestDto);
+        log.debug("Returned {} offers", offers.size());
+        return offers;
     }
 
     /**
@@ -50,7 +51,7 @@ public class StatementController {
             description = "Выбранное предложение отправляется для сохранения в БД."
     )
     @PostMapping("/offer")
-    public void selectOffer(@RequestBody @Valid LoanOfferDto loanOfferDto) {
+    public void selectOffer(@RequestBody @Valid @Parameter(description = "Выбранное предложение.") LoanOfferDto loanOfferDto) {
         log.info("invoke: /statement/offer");
         log.debug("Received loanOfferDto: {}", loanOfferDto);
         statementService.selectOffer(loanOfferDto);

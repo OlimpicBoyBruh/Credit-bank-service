@@ -39,7 +39,10 @@ public class DealController {
                                                       HttpServletRequest request) {
         log.info("invoke: /statement");
         log.debug("Received loanStatementRequestDto: {}", loanStatementRequestDto);
-        return managerService.getLoanOffer(loanStatementRequestDto, request.getSession().getId());
+        List<LoanOfferDto> loanOfferDtos = managerService.getLoanOffer(loanStatementRequestDto,
+                request.getSession().getId());
+        log.debug("Return loanStatementRequestDto: {}", loanOfferDtos);
+        return loanOfferDtos;
     }
 
     /**

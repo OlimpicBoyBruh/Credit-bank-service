@@ -2,7 +2,7 @@
                    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
-    
+
     <include file="v1-create-client-table-changelog.xml" relativeToChangelogFile="true"/>
     <include file="v1-create-credit-table-changelog.xml" relativeToChangelogFile="true"/>
     <include file="v1-create-statement-table-changelog.xml" relativeToChangelogFile="true"/>

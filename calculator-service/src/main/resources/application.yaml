@@ -6,6 +6,6 @@ springdoc:
     disable-swagger-default-url: true
     use-root-path: true
 initialization:
-      interest-rate: 20.0
-      insurance-rate: 4.97
+  interest-rate: 20.0
+  insurance-rate: 4.97
 

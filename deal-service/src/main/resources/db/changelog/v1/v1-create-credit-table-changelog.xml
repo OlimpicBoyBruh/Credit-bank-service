@@ -13,10 +13,10 @@
             <column name="rate" type="numeric(38,2)"/>
             <column name="term" type="integer"/>
             <column name="is_insurance_enabled" type="boolean">
-            <constraints nullable="false"/>
+                <constraints nullable="false"/>
             </column>
             <column name="is_salary_client" type="boolean">
-            <constraints nullable="false"/>
+                <constraints nullable="false"/>
             </column>
             <column name="monthly_payment" type="numeric(38,2)"/>
             <column name="credit_status" type="varchar(50)">

@@ -7,7 +7,7 @@ springdoc:
     use-root-path: true
 integration:
   deal:
-    url-default: http://localhost:8085
+    base-url: http://localhost:8085
     post-method:
-      url-select-offer: /deal/offer/select
-      url-statement: /deal/statement
+      path-select-offer: /deal/offer/select
+      path-statement: /deal/statement
