@@ -1,4 +1,4 @@
-package ru.bank.jd.util;
+package ru.bank.jd.controller;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -13,7 +13,7 @@ import ru.bank.jd.service.ScoringDataProcess;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-class ScoringDataProcessTest {
+class OfferServiceTest {
 
 
     @Test

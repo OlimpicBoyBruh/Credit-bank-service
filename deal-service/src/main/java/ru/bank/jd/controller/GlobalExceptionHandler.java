@@ -9,6 +9,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.client.HttpClientErrorException;
 import java.util.List;
 
 @ControllerAdvice
@@ -35,6 +36,13 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<ErrorMessage> illegalArgumentHandler(IllegalArgumentException exception) {
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(new ErrorMessage(exception.getMessage()));
+    }
+
+    @ExceptionHandler(HttpClientErrorException.class)
+    public ResponseEntity<ErrorMessage> HttpClientErrorHandler(HttpClientErrorException exception) {
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body(new ErrorMessage(exception.getMessage()));

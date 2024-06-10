@@ -10,7 +10,7 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-public class PreScoringDataProcess {
+public class OfferService {
     private final PaymentScheduleGenerator paymentScheduleGenerator;
     private static final BigDecimal RATE_MULTIPLICATION = new BigDecimal("100");
 

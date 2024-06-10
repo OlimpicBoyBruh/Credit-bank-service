@@ -6,14 +6,14 @@ import org.springframework.stereotype.Component;
 import ru.bank.jd.configuration.AppProperties;
 import ru.bank.jd.dto.LoanOfferDto;
 import ru.bank.jd.dto.LoanStatementRequestDto;
-import ru.bank.jd.service.PreScoringDataProcess;
+import ru.bank.jd.service.OfferService;
 
 @Slf4j
 @Component
 @RequiredArgsConstructor
 public class CreditOfferFactory {
     private final AppProperties appProperties;
-    private final PreScoringDataProcess preScoringDataProcess;
+    private final OfferService offerService;
 
     /**
      * Creating offers.
@@ -27,7 +27,7 @@ public class CreditOfferFactory {
                                         LoanStatementRequestDto loanStatementRequestDto) {
         log.info("Creating credit offer: isSalaryClient - "
                 + isSalaryClient + ", isInsuranceEnabled - " + isInsuranceEnabled);
-        return preScoringDataProcess.createOffer(isSalaryClient, isInsuranceEnabled,
+        return offerService.createOffer(isSalaryClient, isInsuranceEnabled,
                 appProperties.getInterestRate(), appProperties.getInsuranceRate(),
                 loanStatementRequestDto.getTerm(), loanStatementRequestDto.getAmount());
     }

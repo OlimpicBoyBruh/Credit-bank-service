@@ -6,11 +6,11 @@ import ru.bank.jd.dto.LoanOfferDto;
 import java.math.BigDecimal;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-class PreScoringDataProcessTest {
+class OfferServiceTest {
     @Test
     void createOfferTrueTest() {
-        PreScoringDataProcess preScoringDataProcess = new PreScoringDataProcess(new PaymentScheduleGenerator());
-        LoanOfferDto loanOfferDto = preScoringDataProcess.createOffer(true, true, 10, 4.97, 6, new BigDecimal("10000"));
+        OfferService offerService = new OfferService(new PaymentScheduleGenerator());
+        LoanOfferDto loanOfferDto = offerService.createOffer(true, true, 10, 4.97, 6, new BigDecimal("10000"));
         assertAll(() -> Assertions.assertEquals(new BigDecimal("10723.14"), loanOfferDto.getTotalAmount()),
                 () -> Assertions.assertEquals(new BigDecimal("1787.19"), loanOfferDto.getMonthlyPayment()),
                 () -> Assertions.assertEquals(new BigDecimal("7.35"), loanOfferDto.getRate())
@@ -20,8 +20,8 @@ class PreScoringDataProcessTest {
 
     @Test
     void createOfferFalseTest() {
-        PreScoringDataProcess preScoringDataProcess = new PreScoringDataProcess(new PaymentScheduleGenerator());
-        LoanOfferDto loanOfferDto = preScoringDataProcess.createOffer(false, false, 10, 4.97, 6, new BigDecimal("10000"));
+        OfferService offerService = new OfferService(new PaymentScheduleGenerator());
+        LoanOfferDto loanOfferDto = offerService.createOffer(false, false, 10, 4.97, 6, new BigDecimal("10000"));
         assertAll(() -> Assertions.assertEquals(new BigDecimal("10293.66"), loanOfferDto.getTotalAmount()),
                 () -> Assertions.assertEquals(new BigDecimal("1715.61"), loanOfferDto.getMonthlyPayment()),
                 () -> Assertions.assertEquals(new BigDecimal("10.00"), loanOfferDto.getRate())
@@ -30,8 +30,8 @@ class PreScoringDataProcessTest {
 
     @Test
     void createOfferTrueAndFalseTest() {
-        PreScoringDataProcess preScoringDataProcess = new PreScoringDataProcess(new PaymentScheduleGenerator());
-        LoanOfferDto loanOfferDto = preScoringDataProcess.createOffer(true, false, 10, 4.97, 6, new BigDecimal("10000"));
+        OfferService offerService = new OfferService(new PaymentScheduleGenerator());
+        LoanOfferDto loanOfferDto = offerService.createOffer(true, false, 10, 4.97, 6, new BigDecimal("10000"));
         assertAll(() -> Assertions.assertEquals(new BigDecimal("10258.20"), loanOfferDto.getTotalAmount()),
                 () -> Assertions.assertEquals(new BigDecimal("1709.70"), loanOfferDto.getMonthlyPayment()),
                 () -> Assertions.assertEquals(new BigDecimal("8.80"), loanOfferDto.getRate())
@@ -41,8 +41,8 @@ class PreScoringDataProcessTest {
 
     @Test
     void createOfferFalseAndTrueTest() {
-        PreScoringDataProcess preScoringDataProcess = new PreScoringDataProcess(new PaymentScheduleGenerator());
-        LoanOfferDto loanOfferDto = preScoringDataProcess
+        OfferService offerService = new OfferService(new PaymentScheduleGenerator());
+        LoanOfferDto loanOfferDto = offerService
                 .createOffer(false, true, 10, 4.97, 6, new BigDecimal("10000"));
         assertAll(() -> Assertions.assertEquals(new BigDecimal("10760.28"), loanOfferDto.getTotalAmount()),
                 () -> Assertions.assertEquals(new BigDecimal("1793.38"), loanOfferDto.getMonthlyPayment()),

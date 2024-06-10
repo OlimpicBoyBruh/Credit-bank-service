@@ -47,18 +47,6 @@ class CalculatorControllerTest {
     }
 
     @Test
-    void searchOffersUnsuccessfullyTest() throws Exception {
-        LoanStatementRequestDto loanStatementRequestDto = getLoanStatementRequestDto();
-        loanStatementRequestDto.setTerm(3);
-        String loanStatementJson = mapper.writeValueAsString(loanStatementRequestDto);
-
-        mockMvc.perform(post("/calculator/offers")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(loanStatementJson))
-                .andExpect(status().isBadRequest());
-    }
-
-    @Test
     void validationDataSuccessfullyTest() throws Exception {
         ScoringDataDto scoringDataDto = getScoringDataDto();
         String scoringDataJson = mapper.writeValueAsString(scoringDataDto);

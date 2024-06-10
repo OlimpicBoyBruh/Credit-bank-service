@@ -72,7 +72,7 @@ class CalculatorServiceTest {
                 .thenReturn(creditDtoMock);
 
         CreditDto creditDto = calculatorService.prepareCredit(scoringDataDto);
-        assertAll(() ->Assertions.assertEquals(12, creditDto.getTerm()),
+        assertAll(() -> Assertions.assertEquals(12, creditDto.getTerm()),
                 () -> Assertions.assertEquals(creditDto.getAmount(), new BigDecimal("100000.50")));
     }
 

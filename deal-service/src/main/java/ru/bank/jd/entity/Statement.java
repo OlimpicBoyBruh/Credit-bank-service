@@ -20,7 +20,6 @@ import java.util.UUID;
 @AllArgsConstructor
 public class Statement {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID statementId;
     @OneToOne
     @JoinColumn(name = "client_id")

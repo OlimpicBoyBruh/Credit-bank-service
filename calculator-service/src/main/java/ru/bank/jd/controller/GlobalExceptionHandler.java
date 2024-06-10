@@ -37,7 +37,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(CreditDeniedException.class)
     public ResponseEntity<ErrorMessage> creditDenyHandler(CreditDeniedException exception) {
         return ResponseEntity
-                .status(HttpStatus.FORBIDDEN)
+                .status(HttpStatus.UNPROCESSABLE_ENTITY)
                 .body(new ErrorMessage(exception.getMessage()));
     }
 }

@@ -10,13 +10,13 @@ spring:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     show-sql: true
     hibernate:
-      default_schema: "${app.schema}"
       ddl-auto: validate
       properties:
         hibernate:
-          default_schema: "${app.schema}"
           dialect: org.hibernate.dialect.PostgreSQLDialect
           jdbc.time_zone: UTC
+  liquibase:
+    change-log: db/changelog/changelog-master.xml
 
 springdoc:
   swagger-ui:
@@ -27,5 +27,3 @@ integration:
   calculator:
     url-offer: http://localhost:8190/calculator/offers
     url-calc: http://localhost:8190/calculator/calc
-app:
-  schema: "credit_bank"

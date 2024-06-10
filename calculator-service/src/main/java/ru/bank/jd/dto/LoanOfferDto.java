@@ -1,7 +1,8 @@
 package ru.bank.jd.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import java.math.BigDecimal;
 
 @AllArgsConstructor

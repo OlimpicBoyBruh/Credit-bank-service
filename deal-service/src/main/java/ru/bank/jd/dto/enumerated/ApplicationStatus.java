@@ -17,6 +17,10 @@ public enum ApplicationStatus {
      */
     CC_DENIED,
     /**
+     * Одобренная заявка кредитной карты.
+     */
+    CC_APPROVED,
+    /**
      * Подготовка документов.
      */
     PREPARE_DOCUMENTS,

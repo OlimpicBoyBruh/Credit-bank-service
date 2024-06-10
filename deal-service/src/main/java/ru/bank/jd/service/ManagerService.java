@@ -1,9 +1,9 @@
 package ru.bank.jd.service;
 
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 import ru.bank.jd.component.RequestTemplateCalculationRest;
 import ru.bank.jd.dto.CreditDto;
 import ru.bank.jd.dto.StatementStatusHistoryDto;
@@ -25,7 +25,6 @@ import java.util.UUID;
 
 @Slf4j
 @Service
-@Transactional
 @RequiredArgsConstructor
 public class ManagerService {
     private final ClientRepositoryService clientRepositoryService;
@@ -38,52 +37,78 @@ public class ManagerService {
 
 
     public List<LoanOfferDto> getLoanOffer(LoanStatementRequestDto loanStatementRequestDto, String sesCode) {
+        List<LoanOfferDto> loanOfferDtoList;
         log.info("invoke getLoanOffer.");
         Statement statement = Statement.builder()
-                .client(clientRepositoryService.saveFromLoanDto(loanStatementRequestDto))
+                .statementId(UUID.randomUUID())
                 .creationDate(LocalDateTime.now())
                 .sesCode(sesCode)
+                .status(String.valueOf(ApplicationStatus.PREAPPROVAL))
+                .statusHistory(List
+                        .of(new StatementStatusHistoryDto(ApplicationStatus.PREAPPROVAL, LocalDateTime.now(), ChangeType.AUTOMATIC)))
                 .build();
-        statementRepositoryService.save(statement);
-        return calculationRest.callOffers(loanStatementRequestDto).stream()
-                .map(offer -> {
-                    offer.setStatementId(statement.getStatementId().toString());
-                    return offer;
-                })
-                .toList();
+        try {
+
+            loanOfferDtoList = calculationRest.callOffers(loanStatementRequestDto).stream()
+                    .map(offer -> {
+                        offer.setStatementId(statement.getStatementId().toString());
+                        return offer;
+                    })
+                    .toList();
+
+            statement.setClient(clientRepositoryService.saveFromLoanDto(loanStatementRequestDto));
+            statementRepositoryService.save(statement);
+            return loanOfferDtoList;
+        } catch (HttpClientErrorException httpClientErrorException) {
+            log.error("Error while calculating offer: {}", httpClientErrorException.getMessage());
+            throw httpClientErrorException;
+        }
     }
 
     public void selectLoanOffer(LoanOfferDto loanOfferDto) {
         log.info("invoke selectLoanOffer -  LoanOfferDto: {}", loanOfferDto);
         Statement statement = statementRepositoryService.getReferenceById(UUID.fromString(loanOfferDto.getStatementId()));
         statement.setAppliedOffer(loanOfferDto);
-        StatementStatusHistoryDto historyDto =
-                new StatementStatusHistoryDto(ApplicationStatus.PREAPPROVAL, LocalDateTime.now(), ChangeType.AUTOMATIC);
-
-        statement.setStatus(historyDto.getStatus().toString());
-        statement.setStatusHistory(List.of(historyDto));
-
+        addStatusHistory(statement, ApplicationStatus.APPROVED);
         statementRepositoryService.save(statement);
     }
 
     public void calculateCredit(FinishRegistrationRequestDto requestDto, String statementId) {
         log.info("Invoke calculateCredit.");
+
         Statement statement = statementRepositoryService.getReferenceById(UUID.fromString(statementId));
         Client client = clientRepositoryService.getById(statement.getClient().getClientId());
-        statement.getStatusHistory()
-                .add(new StatementStatusHistoryDto(ApplicationStatus.APPROVED, LocalDateTime.now(), ChangeType.AUTOMATIC));
-        statement.setStatus(ApplicationStatus.APPROVED.toString());
 
-        clientMapper.finishRegistrationRequestDtoToClient(requestDto, client);
-        clientRepositoryService.save(client);
+        CreditDto creditDto;
+        try {
+            creditDto = calculationRest.callCalc(scoringDataMapper
+                    .clientAndFinishRequestAndLoanOfferToScoringDto(client, requestDto, statement.getAppliedOffer()));
 
-        CreditDto creditDto = calculationRest.callCalc(scoringDataMapper
-                .clientAndFinishRequestAndLoanOfferToScoringDto(client,
-                        requestDto, statement.getAppliedOffer()));
+        } catch (HttpClientErrorException httpClientErrorException) {
+            addStatusHistory(statement, ApplicationStatus.CC_DENIED);
+            updateClientAndSave(requestDto, client);
+            log.error("Error while calculating credit: {}", httpClientErrorException.getMessage());
+            throw httpClientErrorException;
+        }
         log.debug("Received creditDto: {}", creditDto);
+
         Credit credit = creditMapper.creditDtoToCredit(creditDto);
         credit.setCreditStatus(CreditStatus.CALCULATED);
+
+        addStatusHistory(statement, ApplicationStatus.CC_APPROVED);
+
         statement.setCreditId(credit);
         creditRepositoryService.save(credit);
+        updateClientAndSave(requestDto, client);
+    }
+
+    private void addStatusHistory(Statement statement, ApplicationStatus status) {
+        statement.getStatusHistory().add(new StatementStatusHistoryDto(status, LocalDateTime.now(), ChangeType.AUTOMATIC));
+        statement.setStatus(status.toString());
+    }
+
+    private void updateClientAndSave(FinishRegistrationRequestDto requestDto, Client client) {
+        clientMapper.finishRegistrationRequestDtoToClient(requestDto, client);
+        clientRepositoryService.save(client);
     }
 }

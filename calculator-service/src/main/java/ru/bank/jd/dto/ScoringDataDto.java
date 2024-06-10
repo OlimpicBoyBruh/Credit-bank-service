@@ -15,7 +15,7 @@ import java.time.LocalDate;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class  ScoringDataDto {
+public class ScoringDataDto {
     /**
      * Сумма.
      */
