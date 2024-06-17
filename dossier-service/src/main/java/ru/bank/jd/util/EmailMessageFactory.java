@@ -38,7 +38,7 @@ public class EmailMessageFactory {
         SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
         simpleMailMessage.setTo(emailMessage.getAddress());
         simpleMailMessage.setSubject("Подписание документов");
-        simpleMailMessage.setText("Здравствуйте! дял подписания документов, просьба перейти по ссылке: "
+        simpleMailMessage.setText("Здравствуйте! для подписания документов, просьба перейти по ссылке: "
                 + "\"ссылка\" \n" + "Ваш код: " + sesCode);
         return simpleMailMessage;
     }
