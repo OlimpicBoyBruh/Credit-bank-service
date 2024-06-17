@@ -44,7 +44,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(HttpClientErrorException.class)
     public ResponseEntity<ErrorMessage> HttpClientErrorHandler(HttpClientErrorException exception) {
         return ResponseEntity
-                .status(HttpStatus.BAD_REQUEST)
+                .status(exception.getStatusCode())
                 .body(new ErrorMessage(exception.getMessage()));
     }
 }

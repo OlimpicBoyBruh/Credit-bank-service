@@ -1,0 +1,29 @@
+server:
+  port: 8095
+
+spring:
+  kafka:
+    consumer:
+      group-id: "dealGroup"
+    bootstrap-servers: localhost:29092
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    test-connection: true
+    username: javaspringtest17@gmail.com
+    password: "osfg qxra otwj pntb"
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+integration:
+  deal:
+    base-url: http://localhost:8085
+    get-method:
+      path-statement: /deal/statement/get
+    put-method:
+      path-update-status: /deal/admin/statement/{statementId}/status
