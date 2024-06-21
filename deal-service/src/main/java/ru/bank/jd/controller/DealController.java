@@ -98,6 +98,7 @@ public class DealController {
         statementRepositoryService.updateStatusStatement(UUID.fromString(statementId),
                 ApplicationStatus.PREPARE_DOCUMENTS);
         kafkaSender.sendMessageDossierEmail(statementId, Theme.SEND_DOCUMENTS);
+        log.info("Successfully send message requestSendDocument.");
     }
 
     /**
@@ -113,6 +114,7 @@ public class DealController {
     public void requestSignDocument(@PathVariable String statementId) {
         statementRepositoryService.updateSesCode(UUID.fromString(statementId));
         kafkaSender.sendMessageDossierEmail(statementId, Theme.SEND_SES);
+        log.info("Successfully send message requestSignDocument.");
     }
 
     /**
@@ -129,6 +131,7 @@ public class DealController {
     public void requestSignCode(@PathVariable String statementId, @RequestParam String sesCodeDto) {
         statementRepositoryService.verifySesCode(UUID.fromString(statementId), sesCodeDto);
         kafkaSender.sendMessageDossierEmail(statementId, Theme.CREDIT_ISSUED);
+        log.info("Successfully send message requestSignCode.");
     }
 
     /**
@@ -162,5 +165,6 @@ public class DealController {
     public void updateStatusStatement(@PathVariable String statementId) {
         log.info("Invoke updateStatusStatement: {}", statementId);
         statementRepositoryService.updateStatusStatement(UUID.fromString(statementId), ApplicationStatus.DOCUMENT_CREATED);
+        log.info("Successfully update status statementId: {}", statementId);
     }
 }

@@ -26,7 +26,7 @@ public class KafkaConsumerConfig {
         Map<String, Object> props = new HashMap<>();
         JsonDeserializer<EmailMessage> deserializer = new JsonDeserializer<>(EmailMessage.class);
         deserializer.setRemoveTypeHeaders(false);
-        deserializer.addTrustedPackages("*");
+        deserializer.addTrustedPackages("ru.bank.jd.dto");
         deserializer.setUseTypeMapperForKey(true);
 
         props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);

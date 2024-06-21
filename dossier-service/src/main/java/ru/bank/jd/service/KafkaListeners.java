@@ -18,20 +18,20 @@ public class KafkaListeners {
     @KafkaListener(topics = {"finish-registration", "create-documents", "statement-denied", "credit-issued"},
             groupId = "dealGroup")
     private void sendEmailMessage(@Valid EmailMessage data) {
-        log.debug("Receiver topic: {}", data.getTheme().toString());
+        log.info("Receiver topic: {}", data.getTheme().toString());
         emailService.sendSimpleEmail(data);
     }
 
     @KafkaListener(topics = "send-documents", groupId = "dealGroup")
     private void finishRegistration(@Valid EmailMessage data) {
-        log.debug("Receiver topic: {}", data.getTheme().toString());
+        log.info("Receiver topic: {}", data.getTheme().toString());
         emailService.sendMimeMessageDocument(data, requestDealServiceRest.getStatementDto(data.getStatementId()));
         requestDealServiceRest.updateStatusHistory(data.getStatementId());
     }
 
     @KafkaListener(topics = "send-ses", groupId = "dealGroup")
     private void sendSesCode(@Valid EmailMessage data) {
-        log.debug("Receiver topic: {}", data.getTheme().toString());
+        log.info("Receiver topic: {}", data.getTheme().toString());
         emailService.sendSesCode(data, requestDealServiceRest.getStatementDto(data.getStatementId()).getSesCode());
     }
 }

@@ -12,11 +12,13 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class CreditDocument {
     public static File createDocument(StatementDto statementDto) {
-        File document = new File("src/main/resources/document.txt");
+        File document = new File("src/main/resources/document-" + statementDto.getStatementId() + ".txt");
         List<PaymentScheduleElementDto> paymentList = statementDto.getPaymentSchedule();
 
         try (FileWriter writer = new FileWriter(document)) {
-            document.createNewFile();
+            if (!document.createNewFile()) {
+                throw new IOException();
+            }
             writer.append("Кредитный договор №" + statementDto.getStatementId() + "\n");
             writer.append("Фамилия: " + statementDto.getLastName() + "\n");
             writer.append("Имя: " + statementDto.getFirstName() + "\n");
@@ -36,7 +38,7 @@ public class CreditDocument {
                 writer.append("Сумма погашения основного долга: " + payment.getDebtPayment() + " ");
                 writer.append("Оставшийся долг: " + payment.getRemainingDebt() + " \n");
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
             throw new RuntimeException("Ошибка записи файл.");
         }
         return document;
