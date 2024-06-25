@@ -19,11 +19,11 @@ public class KafkaSender {
 
     public void sendMessageDossierEmail(String statementId, Theme theme) {
         Client client = statementRepositoryService.getReferenceById(UUID.fromString(statementId)).getClient();
-        kafkaTemplateMail.send(theme.toString(), createMessage(theme, statementId, client.getEmail()));
+        kafkaTemplateMail.send(theme.getThemeValue(), EmailMessage.builder()
+                .address(client.getEmail())
+                .statementId(statementId)
+                .theme(theme)
+                .build());
         log.info("send message dossier-service, theme: {}", theme);
-    }
-
-    private EmailMessage createMessage(Theme theme, String statementId, String email) {
-        return new EmailMessage(statementId, email, theme);
     }
 }

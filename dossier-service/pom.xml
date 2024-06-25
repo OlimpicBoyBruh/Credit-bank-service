@@ -22,6 +22,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <springdoc.version>2.5.0</springdoc.version>
         <spring-cloud.version>2023.0.2</spring-cloud.version>
+        <kafka-test.version>3.2.0</kafka-test.version>
     </properties>
 
     <dependencies>

@@ -62,7 +62,7 @@ public class StatementRepositoryService {
     public void verifySesCode(UUID statementId, String sesCode) {
         log.info("Verify ses code statementId: {}", statementId);
         Statement statement = getReferenceById(statementId);
-        if (statement.getSesCode().equals(sesCode)) {
+        if (!(statement.getSesCode() == null) && statement.getSesCode().equals(sesCode)) {
             updateStatusStatement(statement, ApplicationStatus.DOCUMENT_SIGNED);
             updateStatusStatement(statement, ApplicationStatus.CREDIT_ISSUED);
             save(statement);

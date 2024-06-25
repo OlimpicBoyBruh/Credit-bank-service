@@ -10,11 +10,11 @@ import ru.bank.jd.dto.StatementDto;
 
 @FeignClient(name = "deal-service", url = "${integration.deal.base-url}")
 public interface DealService {
-    @GetMapping(value = "${integration.deal.get-method.path-statement}",
+    @GetMapping(value = "${integration.deal.method.path-statement}",
             consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     StatementDto getStatement(@RequestParam("statementId") String statementId);
 
-    @PutMapping(value = "${integration.deal.put-method.path-update-status}",
+    @PutMapping(value = "${integration.deal.method.path-update-status}",
             consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     void updateStatementStatus(@PathVariable("statementId") String statementId);
 }

@@ -1,12 +1,14 @@
 package ru.bank.jd.dto;
 
-import lombok.Data;
+import lombok.Builder;
+import lombok.Value;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
-@Data
+@Builder
+@Value
 public class StatementDto {
     private UUID statementId;
     private String firstName;

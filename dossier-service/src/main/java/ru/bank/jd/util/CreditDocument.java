@@ -2,23 +2,25 @@ package ru.bank.jd.util;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.bank.jd.dto.PaymentScheduleElementDto;
 import ru.bank.jd.dto.StatementDto;
+import ru.bank.jd.exception.FileWriteException;
 import java.io.File;
 import java.io.FileWriter;
-import java.io.IOException;
 import java.util.List;
+import java.util.UUID;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class CreditDocument {
+    private static final Logger log = LoggerFactory.getLogger(CreditDocument.class);
+
     public static File createDocument(StatementDto statementDto) {
-        File document = new File("src/main/resources/document-" + statementDto.getStatementId() + ".txt");
+        File document = new File("src/main/resources/document-" + UUID.randomUUID() + ".txt");
         List<PaymentScheduleElementDto> paymentList = statementDto.getPaymentSchedule();
 
         try (FileWriter writer = new FileWriter(document)) {
-            if (!document.createNewFile()) {
-                throw new IOException();
-            }
             writer.append("Кредитный договор №" + statementDto.getStatementId() + "\n");
             writer.append("Фамилия: " + statementDto.getLastName() + "\n");
             writer.append("Имя: " + statementDto.getFirstName() + "\n");
@@ -39,7 +41,8 @@ public class CreditDocument {
                 writer.append("Оставшийся долг: " + payment.getRemainingDebt() + " \n");
             }
         } catch (Exception e) {
-            throw new RuntimeException("Ошибка записи файл.");
+            log.error("Exception: {}", e.getMessage());
+            throw new FileWriteException("Ошибка записи файл.");
         }
         return document;
     }
