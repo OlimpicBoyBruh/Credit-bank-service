@@ -46,7 +46,7 @@ public class KafkaConsumerConfig {
         factory.setConsumerFactory(consumerFactory());
         factory.setCommonErrorHandler(new DefaultErrorHandler((record, exception) -> {
             log.error("DefaultErrorHandler message: {}", exception.getMessage());
-        }, new FixedBackOff(1000L, 1L)));
+        }, new FixedBackOff(1000L, 3L)));
         return factory;
     }
 }
