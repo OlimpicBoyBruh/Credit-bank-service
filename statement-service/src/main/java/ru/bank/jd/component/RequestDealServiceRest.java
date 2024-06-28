@@ -20,7 +20,7 @@ public class RequestDealServiceRest {
 
         try {
             return dealService.getOffers(loanStatementRequestDto);
-        } catch (FeignException.FeignClientException exception) {
+        } catch (FeignException exception) {
             log.error("Error while calculating offer: {}", exception.getMessage());
             throw exception;
         }
@@ -30,7 +30,7 @@ public class RequestDealServiceRest {
         log.info("Call deal-service: select offer");
         try {
             dealService.selectOffer(loanOfferDto);
-        } catch (FeignException.FeignClientException exception) {
+        } catch (FeignException exception) {
             log.error("Error select offer: {}", exception.getMessage());
             throw exception;
         }

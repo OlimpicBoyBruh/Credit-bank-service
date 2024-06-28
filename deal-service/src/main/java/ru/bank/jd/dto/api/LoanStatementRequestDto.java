@@ -48,7 +48,7 @@ public class LoanStatementRequestDto {
     /**
      * Email адрес заявителя.
      */
-    @Schema(description = "Email address of the applicant.", defaultValue = "ivanpetrov@example.com")
+    @Schema(description = "Email address of the applicant.", defaultValue = "olimpicboy17@gmail.com")
     @NotBlank(message = "Почта не должна быть пустой или null")
     @Pattern(regexp = "^[\\w.+\\-]+@[a-zA-Z0-9-]+\\.[a-zA-Z]{2,7}$", message = "Некорректный формат email")
     private String email;

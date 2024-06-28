@@ -14,14 +14,14 @@ import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
-import ru.bank.jd.App;
+import ru.bank.jd.StatementApp;
 import ru.bank.jd.controller.StatementController;
 import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
 
 @WireMockTest
 @AutoConfigureMockMvc
 @DirtiesContext
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = {App.class})
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = {StatementApp.class})
 @TestPropertySource(properties = "integration.deal.base-url=${mockServerUrl}")
 public abstract class AbstractSpringContextTest {
     public final static ObjectMapper mapper = new ObjectMapper();

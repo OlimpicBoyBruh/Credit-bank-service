@@ -44,7 +44,15 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(HttpClientErrorException.class)
     public ResponseEntity<ErrorMessage> HttpClientErrorHandler(HttpClientErrorException exception) {
         return ResponseEntity
-                .status(HttpStatus.BAD_REQUEST)
+                .status(exception.getStatusCode())
                 .body(new ErrorMessage(exception.getMessage()));
     }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ErrorMessage> UnexpectedException(Exception exception) {
+        return ResponseEntity
+                .status(520)
+                .body(new ErrorMessage(exception.getMessage()));
+    }
+
 }

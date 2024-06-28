@@ -13,6 +13,7 @@ import ru.bank.jd.dto.api.LoanStatementRequestDto;
 import ru.bank.jd.dto.enumerated.ApplicationStatus;
 import ru.bank.jd.dto.enumerated.ChangeType;
 import ru.bank.jd.dto.enumerated.CreditStatus;
+import ru.bank.jd.dto.enumerated.Theme;
 import ru.bank.jd.entity.Client;
 import ru.bank.jd.entity.Credit;
 import ru.bank.jd.entity.Statement;
@@ -34,15 +35,15 @@ public class ManagerService {
     private final ClientMapper clientMapper;
     private final ScoringDataMapper scoringDataMapper;
     private final CreditMapper creditMapper;
+    private final KafkaSender kafkaSender;
 
 
-    public List<LoanOfferDto> getLoanOffer(LoanStatementRequestDto loanStatementRequestDto, String sesCode) {
+    public List<LoanOfferDto> getLoanOffer(LoanStatementRequestDto loanStatementRequestDto) {
         List<LoanOfferDto> loanOfferDtoList;
         log.info("invoke getLoanOffer.");
         Statement statement = Statement.builder()
                 .statementId(UUID.randomUUID())
                 .creationDate(LocalDateTime.now())
-                .sesCode(sesCode)
                 .status(String.valueOf(ApplicationStatus.PREAPPROVAL))
                 .statusHistory(List
                         .of(new StatementStatusHistoryDto(ApplicationStatus.PREAPPROVAL, LocalDateTime.now(), ChangeType.AUTOMATIC)))
@@ -71,6 +72,7 @@ public class ManagerService {
         statement.setAppliedOffer(loanOfferDto);
         addStatusHistory(statement, ApplicationStatus.APPROVED);
         statementRepositoryService.save(statement);
+        kafkaSender.sendMessageDossierEmail(statement.getStatementId().toString(), Theme.FINISH_REGISTRATION);
     }
 
     public void calculateCredit(FinishRegistrationRequestDto requestDto, String statementId) {
@@ -87,6 +89,7 @@ public class ManagerService {
         } catch (HttpClientErrorException httpClientErrorException) {
             addStatusHistory(statement, ApplicationStatus.CC_DENIED);
             updateClientAndSave(requestDto, client);
+            kafkaSender.sendMessageDossierEmail(statement.getStatementId().toString(), Theme.STATEMENT_DENIED);
             log.error("Error while calculating credit: {}", httpClientErrorException.getMessage());
             throw httpClientErrorException;
         }
@@ -96,10 +99,10 @@ public class ManagerService {
         credit.setCreditStatus(CreditStatus.CALCULATED);
 
         addStatusHistory(statement, ApplicationStatus.CC_APPROVED);
-
         statement.setCreditId(credit);
         creditRepositoryService.save(credit);
         updateClientAndSave(requestDto, client);
+        kafkaSender.sendMessageDossierEmail(statement.getStatementId().toString(), Theme.CREATE_DOCUMENTS);
     }
 
     private void addStatusHistory(Statement statement, ApplicationStatus status) {

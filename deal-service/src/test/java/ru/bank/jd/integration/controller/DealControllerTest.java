@@ -18,7 +18,9 @@ import ru.bank.jd.dto.enumerated.EmploymentStatus;
 import ru.bank.jd.dto.enumerated.Gender;
 import ru.bank.jd.dto.enumerated.MaritalStatus;
 import ru.bank.jd.dto.enumerated.Position;
+import ru.bank.jd.service.KafkaSender;
 import ru.bank.jd.service.ManagerService;
+import ru.bank.jd.service.StatementRepositoryService;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -29,6 +31,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(DealController.class)
 class DealControllerTest {
     @MockBean
+    private KafkaSender kafkaSender;
+    @MockBean
+    private StatementRepositoryService repositoryService;
+    @MockBean
     private ManagerService managerService;
     @Autowired
     private MockMvc mockMvc;
@@ -37,7 +43,7 @@ class DealControllerTest {
 
     @BeforeEach
     public void init() {
-        when(managerService.getLoanOffer(getLoanStatementRequestDto(), "Test")).thenReturn(new ArrayList<>());
+        when(managerService.getLoanOffer(getLoanStatementRequestDto())).thenReturn(new ArrayList<>());
     }
 
     @Test
