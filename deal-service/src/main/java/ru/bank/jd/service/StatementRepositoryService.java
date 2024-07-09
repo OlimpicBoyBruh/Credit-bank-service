@@ -11,7 +11,9 @@ import ru.bank.jd.dto.enumerated.ChangeType;
 import ru.bank.jd.entity.Statement;
 import ru.bank.jd.mapping.StatementMapper;
 import ru.bank.jd.repository.StatementRepository;
+import javax.swing.plaf.nimbus.State;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Slf4j
@@ -30,6 +32,9 @@ public class StatementRepositoryService {
     public Statement getReferenceById(UUID statementId) {
         log.info("invoke getById statement ID: {}", statementId);
         return statementRepository.getReferenceById(statementId);
+    }
+    public Statement getStatementById(UUID statementId) {
+        return statementRepository.getById(statementId);
     }
 
     public StatementDto getbyIdStatementDto(UUID statementId) {
@@ -70,6 +75,10 @@ public class StatementRepositoryService {
             log.error("The ses-code is incorrect, statementId: {}", statementId);
             throw new IllegalArgumentException("The ses-code is incorrect, statementId: " + statementId);
         }
+    }
+    public List<Statement> getAllStatement() {
+        log.info("invoke getAllStatement");
+        return statementRepository.findAll();
     }
 
 }
