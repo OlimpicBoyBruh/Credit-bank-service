@@ -1,7 +1,11 @@
 package ru.bank.jd.dto.api;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -9,6 +13,9 @@ import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+/**
+ * Начальные данные для предварительного расчета.
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -30,20 +37,23 @@ public class LoanStatementRequestDto {
      */
     @Schema(description = "First name of the applicant.", defaultValue = "Иван")
     @NotBlank(message = "Имя не должно быть пустым или null")
-    @Pattern(regexp = "^[a-zA-Zа-яА-Я]{2,30}$", message = "Имя должно содержать от 2 до 30 символов и состоять только из букв")
+    @Pattern(regexp = "^[a-zA-Zа-яА-Я]{2,30}$", message = "Имя должно содержать " +
+            "от 2 до 30 символов и состоять только из букв")
     private String firstName;
     /**
      * Фамилия заявителя.
      */
     @Schema(description = "Last name of the applicant.", defaultValue = "Петров")
     @NotBlank(message = "Фамилия не должна быть пустым или null")
-    @Pattern(regexp = "^[a-zA-Zа-яА-Я]{2,30}$", message = "Фамилия должна содержать от 2 до 30 символов и состоять только из букв")
+    @Pattern(regexp = "^[a-zA-Zа-яА-Я]{2,30}$", message = "Фамилия должна содержать" +
+            " от 2 до 30 символов и состоять только из букв")
     private String lastName;
     /**
      * Отчество заявителя.
      */
     @Schema(description = "Middle name of the applicant.", defaultValue = "Сергеевич")
-    @Pattern(regexp = "^[a-zA-Zа-яА-Я]{0,30}$", message = "Отчество должно содержать до 30 символов и состоять только из букв")
+    @Pattern(regexp = "^[a-zA-Zа-яА-Я]{0,30}$", message = "Отчество должно содержать" +
+            " до 30 символов и состоять только из букв")
     private String middleName;
     /**
      * Email адрес заявителя.

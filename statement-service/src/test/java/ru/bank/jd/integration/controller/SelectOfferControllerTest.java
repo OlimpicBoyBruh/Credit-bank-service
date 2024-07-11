@@ -4,9 +4,7 @@ import com.github.tomakehurst.wiremock.client.WireMock;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import ru.bank.jd.dto.LoanOfferDto;
-import ru.bank.jd.dto.LoanStatementRequestDto;
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.UUID;
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -47,7 +45,7 @@ class SelectOfferControllerTest extends AbstractSpringContextTest {
         mockMvc.perform(post("/statement/offer")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(mapper.writeValueAsString(null)))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().is5xxServerError());
 
     }
 
@@ -82,22 +80,8 @@ class SelectOfferControllerTest extends AbstractSpringContextTest {
         mockMvc.perform(post("/statement/offer")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(mapper.writeValueAsString(getLoanOfferDto())))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isUnprocessableEntity());
 
-    }
-
-    private LoanStatementRequestDto getLoanStatementRequestDto() {
-        return LoanStatementRequestDto.builder()
-                .amount(new BigDecimal("100000"))
-                .term(12)
-                .firstName("Иван")
-                .lastName("Иванов")
-                .middleName("Иванович")
-                .email("ivanov@example.com")
-                .birthdate(LocalDate.of(1990, 5, 15))
-                .passportSeries("1234")
-                .passportNumber("567890")
-                .build();
     }
 
     private static LoanOfferDto getLoanOfferDto() {

@@ -1,16 +1,18 @@
 package ru.bank.jd.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RestController;
 import ru.bank.jd.dto.api.FinishRegistrationRequestDto;
 import ru.bank.jd.dto.api.LoanOfferDto;
 import ru.bank.jd.dto.api.LoanStatementRequestDto;
@@ -26,7 +28,8 @@ public class GatewayController {
     private final GatewayService gatewayService;
 
     @Operation(summary = "Расчет возможных условий.",
-            description = "Возвращает 4 предложения с разными условиями на выбор, отправляется запрос в calculate service."
+            description = "Возвращает 4 предложения с разными условиями на выбор, " +
+                    "отправляется запрос в calculate service."
     )
     @PostMapping("/statement")
     public List<LoanOfferDto> getLoanOffer(@RequestBody @Valid LoanStatementRequestDto loanStatementRequestDto) {
@@ -45,7 +48,6 @@ public class GatewayController {
         log.info("invoke: /statement/select");
         log.debug("Method selectLoanOffer, param: {}", loanOfferDto);
         gatewayService.selectOfferRequest(loanOfferDto);
-        log.info("Successfully select loan offer");
     }
 
     @Operation(summary = "Расчет финальных условий.",
@@ -53,6 +55,7 @@ public class GatewayController {
     )
     @PostMapping("/statement/registration/{statementId}")
     public void endOfRegistration(@Valid @RequestBody FinishRegistrationRequestDto finishRegistrationRequestDto,
+                                  @Parameter(description = "ID заявки", example = "bef81020-ec8d-4968-aa3a-d2d9f0e9824f")
                                   @PathVariable("statementId") String statementId) {
         log.info("Invoke method endOfRegistration, param: {}", finishRegistrationRequestDto);
         gatewayService.calculateCredit(finishRegistrationRequestDto, statementId);
@@ -62,7 +65,9 @@ public class GatewayController {
             description = "Происходит отправка в dossier-service через kafka для формирования email письма."
     )
     @PostMapping("/document/{statementId}")
-    public void createDocumentRequest(@PathVariable("statementId") String statementId) {
+    public void createDocumentRequest(
+            @Parameter(description = "ID заявки", example = "bef81020-ec8d-4968-aa3a-d2d9f0e9824f")
+            @PathVariable("statementId") String statementId) {
         log.info("Invoke method createDocumentRequest, param: {}", statementId);
         gatewayService.callSendDocument(statementId);
     }
@@ -71,16 +76,20 @@ public class GatewayController {
             description = "Происходит отправка в dossier-service через kafka для формирования email письма."
     )
     @PostMapping("/document/{statementId}/sign")
-    public void documentSignRequest(@PathVariable("statementId") String statementId) {
+    public void documentSignRequest(
+            @Parameter(description = "ID заявки", example = "bef81020-ec8d-4968-aa3a-d2d9f0e9824f")
+            @PathVariable("statementId") String statementId) {
         log.info("Invoke method documentSignRequest, param: {}", statementId);
-        gatewayService.CallSignDocument(statementId);
+        gatewayService.callSignDocument(statementId);
     }
 
     @Operation(summary = "Запрос на выдачу кредита.",
             description = "Происходит отправка в dossier-service через kafka для подтверждения выдачи кредита."
     )
     @PostMapping("/document/{statementId}/sign/code")
-    public void verifySesCodeRequest(@PathVariable("statementId") String statementId, @RequestParam String sesCode) {
+    public void verifySesCodeRequest(
+            @Parameter(description = "ID заявки", example = "bef81020-ec8d-4968-aa3a-d2d9f0e9824f")
+            @PathVariable("statementId") String statementId, @RequestParam String sesCode) {
         log.info("Invoke method verifySesCodeRequest, param: {}, {}", statementId, sesCode);
         gatewayService.verifyCode(statementId, sesCode);
     }

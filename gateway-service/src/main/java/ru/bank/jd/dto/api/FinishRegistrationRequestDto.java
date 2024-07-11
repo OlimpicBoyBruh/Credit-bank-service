@@ -12,6 +12,9 @@ import ru.bank.jd.dto.enumerated.Gender;
 import ru.bank.jd.dto.enumerated.MaritalStatus;
 import java.time.LocalDate;
 
+/**
+ * Класс описывает данный, необходимый для дооформления заявки.
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

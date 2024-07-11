@@ -37,7 +37,13 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(FeignException.FeignClientException.class)
     public ResponseEntity<ErrorMessage> FeignExceptionHandler(FeignException.FeignClientException exception) {
         return ResponseEntity
-                .status(HttpStatus.BAD_REQUEST)
+                .status(exception.status())
+                .body(new ErrorMessage(exception.getMessage()));
+    }
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ErrorMessage> unexpectedException(Exception exception) {
+        return ResponseEntity
+                .status(520)
                 .body(new ErrorMessage(exception.getMessage()));
     }
 

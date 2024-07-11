@@ -1,5 +1,6 @@
 package ru.bank.jd.service;
 
+import feign.FeignException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -19,36 +20,67 @@ public class GatewayService {
 
     public List<LoanOfferDto> requestForProposals(LoanStatementRequestDto loanStatementRequestDto) {
         log.info("call calculator-service, calculate offers.");
-        return statementService.calculateOffer(loanStatementRequestDto);
+        try {
+            return statementService.calculateOffer(loanStatementRequestDto);
+        } catch (FeignException exception) {
+            log.error("Error requestForProposals: {}", exception.getMessage());
+            throw exception;
+        }
     }
 
     public void selectOfferRequest(LoanOfferDto loanOfferDto) {
         log.info("call calculator-service, select offers.");
-        statementService.selectOffer(loanOfferDto);
+        try {
+            statementService.selectOffer(loanOfferDto);
+        } catch (FeignException exception) {
+            log.error("Error selectOffer: {}", exception.getMessage());
+            throw exception;
+        }
         log.info("Successfully select offer.");
     }
 
     public void callSendDocument(String statementId) {
         log.info("call deal-service, send document.");
-        dealService.sendDocument(statementId);
+        try {
+            dealService.sendDocument(statementId);
+        } catch (FeignException exception) {
+            log.error("Error callSendDocument: {}", exception.getMessage());
+            throw exception;
+        }
         log.info("Successfully send document.");
     }
 
-    public void CallSignDocument(String statementId) {
+    public void callSignDocument(String statementId) {
         log.info("call deal-service, sign document.");
-        dealService.signDocument(statementId);
+        try {
+            dealService.signDocument(statementId);
+        } catch (FeignException exception) {
+            log.error("Error callSignDocument: {}", exception.getMessage());
+            throw exception;
+        }
         log.info("Successfully sign document.");
     }
 
     public void calculateCredit(FinishRegistrationRequestDto finishRegistrationRequestDto, String statementId) {
         log.info("call deal-service, full calculation of the application.");
-        dealService.calculateCredit(finishRegistrationRequestDto, statementId);
+        try {
+            dealService.calculateCredit(finishRegistrationRequestDto, statementId);
+        } catch (FeignException exception) {
+            log.error("Error calculateCredit: {}", exception.getMessage());
+            throw exception;
+        }
         log.info("call deal-service, full calculation of the application successfully.");
     }
 
     public void verifyCode(String statementId, String sesCode) {
         log.info("call deal-service, verify sesCode.");
-        dealService.verifySesCode(statementId, sesCode);
+        try {
+            dealService.verifySesCode(statementId, sesCode);
+        } catch (FeignException exception) {
+            log.error("Error verifyCode: {}", exception.getMessage());
+            throw exception;
+        }
         log.info("Successfully verify.");
     }
 }
+

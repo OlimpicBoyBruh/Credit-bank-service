@@ -4,7 +4,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.mail.SimpleMailMessage;
 import ru.bank.jd.dto.EmailMessage;
 import ru.bank.jd.dto.enumerated.Theme;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class EmailMessageFactoryTest {
 

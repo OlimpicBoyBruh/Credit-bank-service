@@ -13,10 +13,17 @@ import java.util.List;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
-    @ExceptionHandler(FeignException.FeignClientException.class)
-    public ResponseEntity<ErrorMessage> FeignExceptionHandler(FeignException.FeignClientException exception) {
+    @ExceptionHandler(FeignException.FeignServerException.class)
+    public ResponseEntity<ErrorMessage> feignServerExceptionHandler(FeignException.FeignServerException exception) {
         return ResponseEntity
-                .status(HttpStatus.BAD_REQUEST)
+                .status(exception.status())
+                .body(new ErrorMessage(exception.getMessage()));
+    }
+
+    @ExceptionHandler(FeignException.FeignClientException.class)
+    public ResponseEntity<ErrorMessage> feignClientExceptionHandler(FeignException.FeignClientException exception) {
+        return ResponseEntity
+                .status(exception.status())
                 .body(new ErrorMessage(exception.getMessage()));
     }
 
@@ -40,8 +47,9 @@ public class GlobalExceptionHandler {
                 .body(new ErrorMessage(exception.getMessage()));
     }
 
+
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ErrorMessage> UnexpectedException(Exception exception) {
+    public ResponseEntity<ErrorMessage> unexpectedException(Exception exception) {
         return ResponseEntity
                 .status(520)
                 .body(new ErrorMessage(exception.getMessage()));

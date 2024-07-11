@@ -8,7 +8,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Hibernate;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import ru.bank.jd.dto.api.FinishRegistrationRequestDto;
 import ru.bank.jd.dto.api.LoanOfferDto;
 import ru.bank.jd.dto.api.LoanStatementRequestDto;
@@ -44,7 +51,7 @@ public class DealController {
     )
     @PostMapping("/statement")
     public List<LoanOfferDto> calculationPossibleLoan(@RequestBody @Parameter(description = "Кредитная заявка.")
-                                                          @Valid LoanStatementRequestDto loanStatementRequestDto) {
+                                                      @Valid LoanStatementRequestDto loanStatementRequestDto) {
         log.info("invoke: /statement");
         log.debug("Received loanStatementRequestDto: {}", loanStatementRequestDto);
         List<LoanOfferDto> loanOfferDtos = managerService.getLoanOffer(loanStatementRequestDto);

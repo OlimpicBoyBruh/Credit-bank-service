@@ -15,7 +15,9 @@ import ru.bank.jd.mapping.ScoringDataMapper;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.UUID;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class ScoringDataMapperTest {
     private final ScoringDataMapper scoringDataMapper = Mappers.getMapper(ScoringDataMapper.class);

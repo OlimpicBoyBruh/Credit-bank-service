@@ -15,7 +15,10 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class KafkaListenersTest {
@@ -49,12 +52,14 @@ public class KafkaListenersTest {
         doThrow(new RuntimeException("Error Test")).when(emailService).sendMimeMessageDocument(any(), any());
         assertThrows(RuntimeException.class, () -> kafkaListeners.finishRegistration(getEmailMessage()));
     }
+
     @Test
     void sendSesCodeSuccess() {
         when(requestDealServiceRest.getStatementDto(any())).thenReturn(getStatementDto());
         assertDoesNotThrow(() -> kafkaListeners.sendSesCode(getEmailMessage()));
         verify(emailService, times(1)).sendSesCode(any(), any());
     }
+
     @Test
     void sendSesCodeException() {
         when(requestDealServiceRest.getStatementDto(any())).thenReturn(getStatementDto());
