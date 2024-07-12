@@ -80,7 +80,7 @@ public class GatewayService {
             log.error("Error verifyCode: {}", exception.getMessage());
             throw exception;
         }
-        log.info("Successfully verify.");
+        log.info("Successfully verify code.");
     }
 }
 

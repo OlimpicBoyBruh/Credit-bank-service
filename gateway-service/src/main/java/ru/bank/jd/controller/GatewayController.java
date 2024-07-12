@@ -6,7 +6,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -48,6 +47,7 @@ public class GatewayController {
         log.info("invoke: /statement/select");
         log.debug("Method selectLoanOffer, param: {}", loanOfferDto);
         gatewayService.selectOfferRequest(loanOfferDto);
+        log.info("The method selectLoanOffer has completed execution successfully.");
     }
 
     @Operation(summary = "Расчет финальных условий.",
@@ -59,6 +59,7 @@ public class GatewayController {
                                   @PathVariable("statementId") String statementId) {
         log.info("Invoke method endOfRegistration, param: {}", finishRegistrationRequestDto);
         gatewayService.calculateCredit(finishRegistrationRequestDto, statementId);
+        log.info("The method endOfRegistration has completed execution successfully.");
     }
 
     @Operation(summary = "Создание и отправка сформированных документов.",
@@ -70,6 +71,7 @@ public class GatewayController {
             @PathVariable("statementId") String statementId) {
         log.info("Invoke method createDocumentRequest, param: {}", statementId);
         gatewayService.callSendDocument(statementId);
+        log.info("The method createDocumentRequest has completed execution successfully.");
     }
 
     @Operation(summary = "Подписание документов.",
@@ -81,6 +83,7 @@ public class GatewayController {
             @PathVariable("statementId") String statementId) {
         log.info("Invoke method documentSignRequest, param: {}", statementId);
         gatewayService.callSignDocument(statementId);
+        log.info("The method documentSignRequest has completed execution successfully.");
     }
 
     @Operation(summary = "Запрос на выдачу кредита.",
@@ -92,6 +95,7 @@ public class GatewayController {
             @PathVariable("statementId") String statementId, @RequestParam String sesCode) {
         log.info("Invoke method verifySesCodeRequest, param: {}, {}", statementId, sesCode);
         gatewayService.verifyCode(statementId, sesCode);
+        log.info("The method verifySesCodeRequest has completed execution successfully.");
     }
 
 
