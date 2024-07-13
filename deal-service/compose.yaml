@@ -1,14 +1,19 @@
-name: credit-bank
-
 services:
 
-  postgres:
-    image: postgres:13.8-alpine
-    container_name: "credit-bank-db"
-    restart: always
+  deal-service:
+    build: .
+    container_name: "deal-service"
+    image: "credit-bank-deal-service"
     environment:
-      - POSTGRES_DB=credit-db
-      - POSTGRES_USER=fakeuser
-      - POSTGRES_PASSWORD=fakepassword
+      - SPRING_DATASOURCE_URL=${DB_URL}
+      - SPRING_DATASOURCE_USERNAME=${DB_USER}
+      - SPRING_DATASOURCE_PASSWORD=${DB_PASSWORD}
+      - INTEGRATION_CALCULATOR_BASE-URL=${INTEGRATION_CALCULATOR_BASE_URL}
+      - SPRING_KAFKA_BOOTSTRAP_SERVERS=${SPRING_KAFKA_BOOTSTRAP_SERVERS}
+    networks:
+      - backend
     ports:
-      - "5432:5432"
+      - 8085:8085
+    depends_on:
+      - db-service
+

@@ -12,7 +12,17 @@ import org.springframework.validation.annotation.Validated;
 @ConfigurationProperties(prefix = "integration.calculator")
 public class IntegrationProperties {
     @NotNull
-    private String urlOffer;
+    private String baseUrl;
+
     @NotNull
-    private String urlCalc;
+    private Method method = new Method();
+
+    @Data
+    public static class Method {
+        @NotNull
+        private String urlOffer;
+
+        @NotNull
+        private String urlCalc;
+    }
 }

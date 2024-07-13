@@ -1,0 +1,12 @@
+services:
+  gateway-service:
+    build: .
+    container_name: "gateway-service"
+    image: "credit-bank-gateway-service"
+    environment:
+      - INTEGRATION_STATEMENT_BASE-URL=${INTEGRATION_STATEMENT_BASE_URL}
+      - INTEGRATION_DEAL_BASE-URL=${INTEGRATION_DEAL_BASE_URL}
+    ports:
+      - 9090:9090
+    networks:
+      - backend

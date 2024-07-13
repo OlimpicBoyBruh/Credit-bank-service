@@ -1,0 +1,11 @@
+services:
+  statement-service:
+    build: .
+    container_name: "statement-service"
+    image: "credit-bank-statement-service"
+    ports:
+      - "8205:8205"
+    networks:
+      - backend
+    environment:
+      - INTEGRATION_DEAL_BASE-URL=${INTEGRATION_DEAL_BASE_URL}

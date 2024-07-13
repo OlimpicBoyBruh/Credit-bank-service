@@ -2,8 +2,7 @@ package ru.bank.jd.util;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import ru.bank.jd.dto.PaymentScheduleElementDto;
 import ru.bank.jd.dto.StatementDto;
 import ru.bank.jd.exception.FileWriteException;
@@ -12,12 +11,12 @@ import java.io.FileWriter;
 import java.util.List;
 import java.util.UUID;
 
+@Slf4j
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class CreditDocument {
-    private static final Logger log = LoggerFactory.getLogger(CreditDocument.class);
 
     public static File createDocument(StatementDto statementDto) {
-        File document = new File("src/main/resources/document-" + UUID.randomUUID() + ".txt");
+        File document = new File("document-" + UUID.randomUUID() + ".txt");
         List<PaymentScheduleElementDto> paymentList = statementDto.getPaymentSchedule();
 
         try (FileWriter writer = new FileWriter(document)) {
