@@ -13,6 +13,20 @@ import java.util.List;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
+    @ExceptionHandler(FeignException.FeignServerException.class)
+    public ResponseEntity<ErrorMessage> feignServerExceptionHandler(FeignException.FeignServerException exception) {
+        return ResponseEntity
+                .status(exception.status())
+                .body(new ErrorMessage(exception.getMessage()));
+    }
+
+    @ExceptionHandler(FeignException.FeignClientException.class)
+    public ResponseEntity<ErrorMessage> feignClientExceptionHandler(FeignException.FeignClientException exception) {
+        return ResponseEntity
+                .status(exception.status())
+                .body(new ErrorMessage(exception.getMessage()));
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorMessage> handleValidationHandler(MethodArgumentNotValidException exception) {
         BindingResult result = exception.getBindingResult();
@@ -27,24 +41,19 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<ErrorMessage> argumentConstructHandler(IllegalArgumentException exception) {
-
+    public ResponseEntity<ErrorMessage> illegalArgumentHandler(IllegalArgumentException exception) {
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body(new ErrorMessage(exception.getMessage()));
     }
 
-    @ExceptionHandler(FeignException.FeignClientException.class)
-    public ResponseEntity<ErrorMessage> FeignExceptionHandler(FeignException.FeignClientException exception) {
-        return ResponseEntity
-                .status(exception.status())
-                .body(new ErrorMessage(exception.getMessage()));
-    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorMessage> unexpectedException(Exception exception) {
         return ResponseEntity
                 .status(520)
                 .body(new ErrorMessage(exception.getMessage()));
     }
+
 
 }

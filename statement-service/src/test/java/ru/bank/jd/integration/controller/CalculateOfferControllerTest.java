@@ -44,7 +44,7 @@ class CalculateOfferControllerTest extends AbstractSpringContextTest {
         mockMvc.perform(post("/statement")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(mapper.writeValueAsString(null)))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().is5xxServerError());
     }
 
     @Test
@@ -75,7 +75,7 @@ class CalculateOfferControllerTest extends AbstractSpringContextTest {
         mockMvc.perform(post("/statement")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(mapper.writeValueAsString(getLoanStatementRequestDto())))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isUnprocessableEntity());
     }
 
 

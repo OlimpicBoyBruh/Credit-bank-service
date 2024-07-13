@@ -12,6 +12,7 @@ import ru.bank.jd.entity.Statement;
 import ru.bank.jd.mapping.StatementMapper;
 import ru.bank.jd.repository.StatementRepository;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Slf4j
@@ -41,14 +42,16 @@ public class StatementRepositoryService {
     public void updateStatusStatement(UUID statementId, ApplicationStatus status) {
         log.info("Update statement: {} , new status: {}", statementId, status);
         Statement statement = statementRepository.getReferenceById(statementId);
-        statement.getStatusHistory().add(new StatementStatusHistoryDto(status, LocalDateTime.now(), ChangeType.AUTOMATIC));
+        statement.getStatusHistory().add(new StatementStatusHistoryDto(status, LocalDateTime.now(),
+                ChangeType.AUTOMATIC));
         statement.setStatus(status.toString());
         statementRepository.save(statement);
     }
 
     public void updateStatusStatement(Statement statement, ApplicationStatus status) {
         log.info("Update statement: {} , new status: {}", statement, status);
-        statement.getStatusHistory().add(new StatementStatusHistoryDto(status, LocalDateTime.now(), ChangeType.AUTOMATIC));
+        statement.getStatusHistory().add(new StatementStatusHistoryDto(status, LocalDateTime.now(),
+                ChangeType.AUTOMATIC));
         statement.setStatus(status.toString());
     }
 
@@ -70,6 +73,11 @@ public class StatementRepositoryService {
             log.error("The ses-code is incorrect, statementId: {}", statementId);
             throw new IllegalArgumentException("The ses-code is incorrect, statementId: " + statementId);
         }
+    }
+
+    public List<Statement> getAllStatement() {
+        log.info("invoke getAllStatement");
+        return statementRepository.findAll();
     }
 
 }

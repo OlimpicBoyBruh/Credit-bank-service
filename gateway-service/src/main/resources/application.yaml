@@ -1,0 +1,22 @@
+server:
+  port: 9090
+
+springdoc:
+  swagger-ui:
+    path: "/swagger"
+    disable-swagger-default-url: true
+    use-root-path: true
+
+integration:
+  deal:
+    base-url: http://localhost:8085
+    method:
+      path-calculate-credit: /deal/calculate/{statementId}
+      path-send-document: /deal/document/{statementId}/send
+      path-sign-document: /deal/document/{statementId}/sign
+      path-verify-sesCode: /deal/document/{statementId}/code
+  statement:
+    base-url: http://localhost:8205
+    method:
+      path-calculate-offer: /statement
+      path-select-offer: /statement/offer

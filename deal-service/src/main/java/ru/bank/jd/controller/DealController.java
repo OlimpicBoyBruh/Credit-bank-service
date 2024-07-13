@@ -6,13 +6,23 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.*;
+import org.hibernate.Hibernate;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import ru.bank.jd.dto.api.FinishRegistrationRequestDto;
 import ru.bank.jd.dto.api.LoanOfferDto;
 import ru.bank.jd.dto.api.LoanStatementRequestDto;
 import ru.bank.jd.dto.api.StatementDto;
 import ru.bank.jd.dto.enumerated.ApplicationStatus;
 import ru.bank.jd.dto.enumerated.Theme;
+import ru.bank.jd.entity.Statement;
 import ru.bank.jd.service.KafkaSender;
 import ru.bank.jd.service.ManagerService;
 import ru.bank.jd.service.StatementRepositoryService;
@@ -22,7 +32,7 @@ import java.util.UUID;
 @Slf4j
 @RestController
 @RequestMapping("/deal")
-@Valid
+@Validated
 @RequiredArgsConstructor
 @Tag(name = "Deal service", description = "Сохраняет данные в БД.")
 public class DealController {
@@ -41,7 +51,7 @@ public class DealController {
     )
     @PostMapping("/statement")
     public List<LoanOfferDto> calculationPossibleLoan(@RequestBody @Parameter(description = "Кредитная заявка.")
-                                                      LoanStatementRequestDto loanStatementRequestDto) {
+                                                      @Valid LoanStatementRequestDto loanStatementRequestDto) {
         log.info("invoke: /statement");
         log.debug("Received loanStatementRequestDto: {}", loanStatementRequestDto);
         List<LoanOfferDto> loanOfferDtos = managerService.getLoanOffer(loanStatementRequestDto);
@@ -166,5 +176,40 @@ public class DealController {
         log.info("Invoke updateStatusStatement: {}", statementId);
         statementRepositoryService.updateStatusStatement(UUID.fromString(statementId), ApplicationStatus.DOCUMENT_CREATED);
         log.info("Successfully update status statementId: {}", statementId);
+    }
+
+    /**
+     * Возвращает конкретную заявку по id.
+     *
+     * @param statementId id заявки.
+     * @return найденную заявку по id.
+     */
+
+    @Operation(summary = "Запрос на получение заявки по id.",
+            description = "Приходит id, по нему из БД возвращается заявка."
+    )
+    @GetMapping("/admin/statement/{statementId}")
+    public Statement getStatementFromId(@PathVariable String statementId) {
+        log.info("Invoke getStatementFromId: {}", statementId);
+        Statement statement = statementRepositoryService.getReferenceById(UUID.fromString(statementId));
+        log.info("return statement: {}", statement);
+        return (Statement) Hibernate.unproxy(statement);
+    }
+
+    /**
+     * Возвращает все statement из БД.
+     *
+     * @return list заявок.
+     */
+
+    @Operation(summary = "Запрос на получение всех заявок.",
+            description = "Возвращает List всех заявок в БД."
+    )
+    @GetMapping("/admin/statement")
+    public List<Statement> getAllStatement() {
+        log.info("Invoke getAllStatement");
+        List<Statement> statements = statementRepositoryService.getAllStatement();
+        log.info("return getAllStatement : {}", statements);
+        return statements;
     }
 }
