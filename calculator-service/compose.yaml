@@ -7,3 +7,4 @@ services:
       - backend
     ports:
       - 8190:8190
+
