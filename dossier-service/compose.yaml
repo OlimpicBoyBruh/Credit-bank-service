@@ -1,5 +1,17 @@
-version: '2'
 services:
+  dossier-service:
+    build: .
+    container_name: "dossier-service"
+    image: "credit-bank-dossier-service"
+    networks:
+      - backend
+    environment:
+      - INTEGRATION_DEAL_BASE_URL=${INTEGRATION_DEAL_BASE_URL}
+      - SPRING_KAFKA_BOOTSTRAP_SERVERS=${SPRING_KAFKA_BOOTSTRAP_SERVERS}
+
+    ports:
+      - 8095:8095
+
   zookeeper:
     image: confluentinc/cp-zookeeper:7.4.4
     environment:
@@ -7,9 +19,13 @@ services:
       ZOOKEEPER_TICK_TIME: 2000
     ports:
       - 22181:22181
+    networks:
+      - backend
 
   kafka:
-    image: confluentinc/cp-kafka:7.4.4
+    image: confluentinc/cp-kafka:latest
+    networks:
+      - backend
     depends_on:
       - zookeeper
     ports:

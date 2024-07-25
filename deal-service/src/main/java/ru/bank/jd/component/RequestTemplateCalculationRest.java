@@ -33,7 +33,8 @@ public class RequestTemplateCalculationRest {
         log.info("Invoke method callOffer, calculate-service");
         HttpEntity<LoanStatementRequestDto> request = new HttpEntity<>(loanStatementRequestDto);
         List<LinkedHashMap<LoanOfferDto, String>> response = restTemplate.postForObject
-                (integrationProperties.getUrlOffer(), request, List.class);
+                (integrationProperties.getBaseUrl() +
+                        integrationProperties.getMethod().getUrlOffer(), request, List.class);
         if (response != null) {
             return response.stream()
                     .map(offer -> objectMapper.convertValue(offer, LoanOfferDto.class))
@@ -52,7 +53,8 @@ public class RequestTemplateCalculationRest {
     public CreditDto callCalc(ScoringDataDto scoringDataDto) {
         log.info("Invoke method callCalc, calculate-service");
         HttpEntity<ScoringDataDto> request = new HttpEntity<>(scoringDataDto);
-        CreditDto response = restTemplate.postForObject(integrationProperties.getUrlCalc(), request, CreditDto.class);
+        CreditDto response = restTemplate.postForObject(integrationProperties.getBaseUrl() +
+                integrationProperties.getMethod().getUrlCalc(), request, CreditDto.class);
         if (response != null) {
             return response;
         } else {

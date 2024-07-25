@@ -1,0 +1,27 @@
+name: credit-bank-service
+
+services:
+
+  db-service:
+    image: postgres:13.8-alpine
+    container_name: "credit-db"
+    restart: always
+    networks:
+      - backend
+    environment:
+      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+    ports:
+      - 5432:5432
+
+include:
+  - path: calculator-service/compose.yaml
+  - path: deal-service/compose.yaml
+  - path: dossier-service/compose.yaml
+  - path: gateway-service/compose.yaml
+  - path: statement-service/compose.yaml
+
+networks:
+  backend:
+    driver: bridge

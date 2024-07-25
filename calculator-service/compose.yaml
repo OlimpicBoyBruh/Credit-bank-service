@@ -1,0 +1,10 @@
+services:
+  calculator-service:
+    build: .
+    container_name: "calculator-service"
+    image: "credit-bank-account-service"
+    networks:
+      - backend
+    ports:
+      - 8190:8190
+
