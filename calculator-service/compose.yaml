@@ -3,6 +3,9 @@ services:
     build: .
     container_name: "calculator-service"
     image: "credit-bank-account-service"
+    environment:
+      - INITIALIZATION_INTEREST_RATE=${INITIALIZATION_INTEREST_RATE}
+      - INITIALIZATION_INSURANCE_RATE=${INITIALIZATION_INSURANCE_RATE}
     networks:
       - backend
     ports:
