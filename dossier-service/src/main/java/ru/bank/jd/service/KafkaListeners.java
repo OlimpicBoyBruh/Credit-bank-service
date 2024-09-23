@@ -15,37 +15,15 @@ public class KafkaListeners {
     public final EmailService emailService;
     public final RequestDealServiceRest requestDealServiceRest;
 
-    @KafkaListener(topics = {"finish-registration", "create-documents", "statement-denied", "credit-issued"},
+    @KafkaListener(topics = {"finish-registration", "create-documents", "statement-denied", "credit-issued", "send-ses",
+            "send-documents"},
             groupId = "dealGroup")
     public void sendEmailMessage(@Valid EmailMessage data) {
-        log.info("Receiver topic: {}", data.getTheme());
+        log.info("Receiver sendEmailMessage topic: {}", data.getTheme());
         try {
-            emailService.sendSimpleEmail(data);
+            emailService.send(data);
         } catch (Exception exception) {
-            log.error("Error send simple email. {}", exception.getMessage());
-            throw exception;
-        }
-    }
-
-    @KafkaListener(topics = "send-documents", groupId = "dealGroup")
-    public void finishRegistration(@Valid EmailMessage data) {
-        log.info("Receiver topic: {}", data.getTheme());
-        try {
-            emailService.sendMimeMessageDocument(data, requestDealServiceRest.getStatementDto(data.getStatementId()));
-            requestDealServiceRest.updateStatusHistory(data.getStatementId());
-        } catch (Exception exception) {
-            log.error("Error send finishRegistration email. {}", exception.getMessage());
-            throw exception;
-        }
-    }
-
-    @KafkaListener(topics = "send-ses", groupId = "dealGroup")
-    public void sendSesCode(@Valid EmailMessage data) {
-        log.info("Receiver topic: {}", data.getTheme());
-        try {
-            emailService.sendSesCode(data, requestDealServiceRest.getStatementDto(data.getStatementId()).getSesCode());
-        } catch (Exception exception) {
-            log.error("Error send sesCode email. {}", exception.getMessage());
+            log.error("Error send email. {}", exception.getMessage());
             throw exception;
         }
     }
